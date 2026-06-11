@@ -1,15 +1,12 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 
 export default function Layout() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      <main className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto p-4 lg:p-6">
+    <div className="flex h-screen bg-neutral-100 dark:bg-black overflow-hidden">
+      <Sidebar />
+      <main className="flex-1 overflow-y-auto">
+        <div className="max-w-6xl mx-auto p-4 lg:p-6 animate-fade-in">
           <Outlet />
         </div>
       </main>

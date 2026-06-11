@@ -14,19 +14,33 @@ import Signup from "./components/Signup.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 export const AuthContext = createContext(null);
+export const ThemeContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
+export const useTheme = () => useContext(ThemeContext);
 
 const getStored = (key) => {
-  try {
-    return localStorage.getItem(key) || sessionStorage.getItem(key);
-  } catch { return null; }
+  try { return localStorage.getItem(key) || sessionStorage.getItem(key); } catch { return null; }
 };
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("fintrack_theme");
+    if (saved) return saved === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("fintrack_theme", isDark ? "dark" : "light");
+  }, [isDark]);
 
   useEffect(() => {
     const storedToken = getStored("fintrack_token");
@@ -48,9 +62,7 @@ export default function App() {
       clear.removeItem("fintrack_token");
       setUser(userObj || null);
       setToken(tokenStr || null);
-    } catch (err) {
-      console.error("persistAuth error:", err);
-    }
+    } catch (err) { console.error("persistAuth error:", err); }
   };
 
   const logout = () => {
@@ -62,7 +74,6 @@ export default function App() {
     setToken(null);
   };
 
-  // Axios interceptor for auth header
   useEffect(() => {
     const id = axios.interceptors.request.use((config) => {
       const t = getStored("fintrack_token");
@@ -74,36 +85,35 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100 dark:bg-black">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-4 border-teal-200 border-t-teal-600 animate-spin" />
-          <p className="text-slate-500 font-medium">Loading FinTrackAI...</p>
+          <div className="w-12 h-12 rounded-full border-2 border-neutral-200 dark:border-neutral-700 border-t-orange-500 animate-spin" />
+          <p className="text-neutral-500 text-sm font-medium tracking-wide">Loading FinTrackAI</p>
         </div>
       </div>
     );
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, persistAuth, logout, apiBase: API_BASE }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-          <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
-          <Route
-            path="/"
-            element={user ? <Layout /> : <Navigate to="/login" />}
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="income" element={<Income />} />
-            <Route path="expense" element={<Expense />} />
-            <Route path="budget" element={<Budget />} />
-            <Route path="goals" element={<Goals />} />
-            <Route path="ai-insights" element={<AIInsights />} />
-            <Route path="profile" element={<Profile />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthContext.Provider>
+    <ThemeContext.Provider value={{ isDark, setIsDark }}>
+      <AuthContext.Provider value={{ user, token, persistAuth, logout, apiBase: API_BASE }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+            <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
+            <Route path="/" element={user ? <Layout /> : <Navigate to="/login" />}>
+              <Route index element={<Dashboard />} />
+              <Route path="income" element={<Income />} />
+              <Route path="expense" element={<Expense />} />
+              <Route path="budget" element={<Budget />} />
+              <Route path="goals" element={<Goals />} />
+              <Route path="ai-insights" element={<AIInsights />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthContext.Provider>
+    </ThemeContext.Provider>
   );
 }
