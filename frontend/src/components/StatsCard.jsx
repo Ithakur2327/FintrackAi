@@ -1,16 +1,9 @@
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { GlowingEffect } from "./GlowingEffect.jsx";
+import { useTheme } from "../App.jsx";
 
-export default function StatsCard({ title, value, change, icon: Icon, color = "orange", prefix = "₹", subtitle }) {
-  const colors = {
-    orange: { bg: "bg-orange-500/10 dark:bg-orange-500/15", icon: "text-orange-500" },
-    green:  { bg: "bg-green-500/10 dark:bg-green-500/15",  icon: "text-green-500" },
-    blue:   { bg: "bg-blue-500/10 dark:bg-blue-500/15",    icon: "text-blue-400" },
-    purple: { bg: "bg-purple-500/10 dark:bg-purple-500/15", icon: "text-purple-400" },
-    red:    { bg: "bg-red-500/10 dark:bg-red-500/15",      icon: "text-red-400" },
-  };
-  const c = colors[color] || colors.orange;
-  const isPositive = change > 0;
-  const isNeutral = change === 0 || change === undefined;
+export default function StatsCard({ title, value, change, icon: Icon, prefix = "₹", subtitle }) {
+  const { isDark } = useTheme();
 
   const formatValue = (v) => {
     if (typeof v !== "number") return v;
@@ -20,17 +13,35 @@ export default function StatsCard({ title, value, change, icon: Icon, color = "o
     return `${prefix}${v.toLocaleString("en-IN")}`;
   };
 
+  const isPositive = change > 0;
+  const isNeutral  = change === 0 || change === undefined;
+
   return (
-    <div className="card-hover group">
+    <div className="relative card group overflow-visible">
+      {/* Glowing border effect — white in dark mode, dark in light mode */}
+      <GlowingEffect
+        disabled={false}
+        spread={24}
+        glow={false}
+        borderWidth={1.5}
+        proximity={64}
+        variant={isDark ? "white" : "dark"}
+      />
+
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-500 uppercase tracking-wider">{title}</p>
-          <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mt-1.5 tracking-tight">{formatValue(value)}</p>
+          <p className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+            {title}
+          </p>
+          <p className="text-2xl font-black text-neutral-900 dark:text-neutral-50 mt-1.5 tracking-tight tabular-nums">
+            {formatValue(value)}
+          </p>
           {subtitle && <p className="text-xs text-neutral-400 mt-0.5">{subtitle}</p>}
         </div>
+
         {Icon && (
-          <div className={`w-10 h-10 rounded-xl ${c.bg} flex items-center justify-center shrink-0 ml-3`}>
-            <Icon size={18} className={c.icon} />
+          <div className="icon-box ml-3">
+            <Icon size={17} className="text-neutral-600 dark:text-neutral-300" />
           </div>
         )}
       </div>
@@ -38,13 +49,13 @@ export default function StatsCard({ title, value, change, icon: Icon, color = "o
       {change !== undefined && (
         <div className="flex items-center gap-1.5 mt-3">
           {isNeutral ? (
-            <Minus size={13} className="text-neutral-400" />
+            <Minus size={12} className="text-neutral-400" />
           ) : isPositive ? (
-            <TrendingUp size={13} className="text-green-500" />
+            <TrendingUp size={12} className="text-neutral-700 dark:text-neutral-300" />
           ) : (
-            <TrendingDown size={13} className="text-red-400" />
+            <TrendingDown size={12} className="text-neutral-500 dark:text-neutral-500" />
           )}
-          <span className={`text-xs font-semibold ${isNeutral ? "text-neutral-400" : isPositive ? "text-green-500" : "text-red-400"}`}>
+          <span className={`text-xs font-bold ${isNeutral ? "text-neutral-400" : isPositive ? "text-neutral-800 dark:text-neutral-200" : "text-neutral-500"}`}>
             {isNeutral ? "No change" : `${isPositive ? "+" : ""}${change}%`}
           </span>
           <span className="text-xs text-neutral-400">vs last period</span>
