@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Save } from "lucide-react";
 
 const EXPENSE_CATEGORIES = ["Food","Housing","Transport","Shopping","Entertainment","Utilities","Healthcare","Education","Travel","Other"];
-const INCOME_CATEGORIES = ["Salary","Freelance","Investment","Business","Gift","Rental","Bonus","Other"];
+const INCOME_CATEGORIES  = ["Salary","Freelance","Investment","Business","Gift","Rental","Bonus","Other"];
 const DEFAULT_FORM = {
   description: "", amount: "", category: "Food",
   date: new Date().toISOString().split("T")[0],
@@ -11,9 +11,9 @@ const DEFAULT_FORM = {
 };
 
 export default function AddTransaction({ isOpen, onClose, onSubmit, editData = null, defaultType = "expense" }) {
-  const [form, setForm] = useState({ ...DEFAULT_FORM, type: defaultType });
+  const [form, setForm]     = useState({ ...DEFAULT_FORM, type: defaultType });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError]   = useState("");
 
   useEffect(() => {
     if (editData) {
@@ -53,38 +53,43 @@ export default function AddTransaction({ isOpen, onClose, onSubmit, editData = n
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={e => e.target === e.currentTarget && onClose()}
       >
         <motion.div
-          className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
-          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
+          initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 40, scale: 0.95 }}
-          transition={{ type: "spring", damping: 30, stiffness: 300 }}
+          exit={{ opacity: 0, y: 32, scale: 0.97 }}
+          transition={{ type: "spring", damping: 28, stiffness: 320 }}
         >
-          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">
-            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
-              {editData ? "Edit Transaction" : "Add Transaction"}
+          {/* Header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-neutral-800">
+            <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              {editData ? "Edit Transaction" : "New Transaction"}
             </h2>
-            <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors">
-              <X size={16} className="text-neutral-500" />
+            <button onClick={onClose} className="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors">
+              <X size={15} className="text-neutral-500" />
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            {error && <div className="text-sm text-red-600 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">{error}</div>}
+          <form onSubmit={handleSubmit} className="p-5 space-y-4">
+            {error && (
+              <div className="text-sm text-red-600 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl px-4 py-3">
+                {error}
+              </div>
+            )}
 
-            {/* Type Toggle */}
-            <div className="flex rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700">
+            {/* Type toggle */}
+            <div className="flex rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
               {["expense", "income"].map(t => (
                 <button key={t} type="button"
                   onClick={() => setForm(p => ({ ...p, type: t, category: t === "income" ? "Salary" : "Food" }))}
                   className={`flex-1 py-2.5 text-sm font-semibold transition-all capitalize ${
                     form.type === t
-                      ? t === "income" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
-                      : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                      ? "bg-neutral-900 dark:bg-white text-white dark:text-black"
+                      : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300"
                   }`}
                 >
                   {t}
@@ -93,49 +98,52 @@ export default function AddTransaction({ isOpen, onClose, onSubmit, editData = n
             </div>
 
             <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Description *</label>
+              <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-1.5">Description *</label>
               <input type="text" className="input" placeholder="e.g. Monthly rent" value={form.description}
                 onChange={e => setForm(p => ({ ...p, description: e.target.value }))} required />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Amount (₹) *</label>
+                <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-1.5">Amount (₹) *</label>
                 <input type="number" className="input" placeholder="0.00" min="0" step="0.01" value={form.amount}
                   onChange={e => setForm(p => ({ ...p, amount: e.target.value }))} required />
               </div>
               <div>
-                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Date</label>
+                <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-1.5">Date</label>
                 <input type="date" className="input" value={form.date}
                   onChange={e => setForm(p => ({ ...p, date: e.target.value }))} />
               </div>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Category *</label>
+              <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-1.5">Category *</label>
               <select className="input" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}>
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Note</label>
+              <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-1.5">Note</label>
               <textarea className="input resize-none" rows={2} placeholder="Optional note..." value={form.note}
                 onChange={e => setForm(p => ({ ...p, note: e.target.value }))} />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Tags (comma separated)</label>
-              <input type="text" className="input" placeholder="e.g. work, urgent" value={form.tags}
+              <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-1.5">Tags</label>
+              <input type="text" className="input" placeholder="work, urgent, monthly" value={form.tags}
                 onChange={e => setForm(p => ({ ...p, tags: e.target.value }))} />
             </div>
 
-            <div className="flex items-center gap-3">
-              <input type="checkbox" id="recurring" checked={form.isRecurring}
-                onChange={e => setForm(p => ({ ...p, isRecurring: e.target.checked }))}
-                className="w-4 h-4 rounded accent-orange-500" />
-              <label htmlFor="recurring" className="text-sm text-neutral-600 dark:text-neutral-400">Recurring transaction</label>
-            </div>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div
+                onClick={() => setForm(p => ({ ...p, isRecurring: !p.isRecurring }))}
+                className={`w-9 h-5 rounded-full transition-colors relative ${form.isRecurring ? "bg-neutral-900 dark:bg-white" : "bg-neutral-200 dark:bg-neutral-700"}`}
+              >
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white dark:bg-neutral-900 shadow transition-transform ${form.isRecurring ? "translate-x-4" : "translate-x-0.5"}`} />
+              </div>
+              <span className="text-sm text-neutral-600 dark:text-neutral-400 select-none">Recurring transaction</span>
+            </label>
 
             {form.isRecurring && (
               <select className="input" value={form.recurringFrequency}
@@ -147,11 +155,14 @@ export default function AddTransaction({ isOpen, onClose, onSubmit, editData = n
               </select>
             )}
 
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-3 pt-1">
               <button type="button" onClick={onClose} className="btn-secondary flex-1">Cancel</button>
-              <button type="submit" disabled={loading} className={`flex-1 flex items-center justify-center gap-2 ${form.type === "income" ? "btn-green" : "btn-primary"}`}>
-                {loading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : editData ? <Save size={15} /> : <Plus size={15} />}
-                {loading ? "Saving..." : editData ? "Save" : "Add"}
+              <button type="submit" disabled={loading} className="btn-primary flex-1">
+                {loading
+                  ? <span className="w-4 h-4 border-2 border-white/30 dark:border-black/30 border-t-white dark:border-t-black rounded-full animate-spin" />
+                  : editData ? <Save size={14} /> : <Plus size={14} />
+                }
+                {loading ? "Saving…" : editData ? "Save" : "Add"}
               </button>
             </div>
           </form>

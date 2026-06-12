@@ -6,16 +6,13 @@ import { PageTransition } from "./PageTransition.jsx";
 export default function Layout() {
   const location = useLocation();
   return (
-    <div className="flex h-screen bg-white dark:bg-black overflow-hidden">
+    <div className="flex h-screen bg-[#f5f5f7] dark:bg-[#0a0a0a] overflow-hidden">
       <Sidebar />
       <main className="flex-1 overflow-y-auto relative">
-        {/* Grid background */}
-        <div
-          className="fixed inset-0 pointer-events-none z-0 grid-bg"
-          style={{ left: 0 }}
-        />
-        {/* Radial fade overlay */}
-        <div className="fixed inset-0 pointer-events-none z-0 bg-white dark:bg-black [mask-image:radial-gradient(ellipse_80%_80%_at_50%_0%,transparent_40%,black)]" />
+        {/* Grid pattern */}
+        <div className="absolute inset-0 grid-bg opacity-100 pointer-events-none z-0" />
+        {/* Soft vignette — top fade only */}
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#f5f5f7] dark:from-[#0a0a0a] to-transparent pointer-events-none z-0" />
         <div className="relative z-10 max-w-5xl mx-auto p-4 lg:p-6">
           <AnimatePresence mode="wait">
             <PageTransition key={location.pathname} pageKey={location.pathname}>
