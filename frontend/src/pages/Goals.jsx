@@ -45,49 +45,49 @@ function GoalModal({ isOpen, onClose, onSave, editData }) {
       <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={e => e.target === e.currentTarget && onClose()}>
-        <motion.div className="bg-white rounded-2xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
+        <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
           initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }}>
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 className="text-lg font-bold text-slate-800">{editData ? "Edit Goal" : "New Goal"}</h2>
-            <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">{editData ? "Edit Goal" : "New Goal"}</h2>
+            <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center">
               <X size={16} />
             </button>
           </div>
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">Goal Title *</label>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Goal Title *</label>
               <input type="text" className="input" placeholder="e.g. Buy a new laptop" value={form.title}
                 onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Target Amount *</label>
+                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Target Amount *</label>
                 <input type="number" className="input" placeholder="50000" min="1" value={form.targetAmount}
                   onChange={e => setForm(p => ({ ...p, targetAmount: e.target.value }))} required />
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Already Saved</label>
+                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Already Saved</label>
                 <input type="number" className="input" placeholder="0" min="0" value={form.savedAmount}
                   onChange={e => setForm(p => ({ ...p, savedAmount: e.target.value }))} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Category</label>
+                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Category</label>
                 <select className="input" value={form.category}
                   onChange={e => setForm(p => ({ ...p, category: e.target.value, emoji: GOAL_EMOJIS[e.target.value] || "🎯" }))}>
                   {GOAL_CATEGORIES.map(c => <option key={c} value={c}>{GOAL_EMOJIS[c]} {c}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Deadline</label>
+                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Deadline</label>
                 <input type="date" className="input" value={form.deadline}
                   onChange={e => setForm(p => ({ ...p, deadline: e.target.value }))}
                   min={new Date().toISOString().split("T")[0]} />
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">Color</label>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Color</label>
               <div className="flex gap-2 flex-wrap">
                 {GOAL_COLORS.map(c => (
                   <button key={c} type="button" onClick={() => setForm(p => ({ ...p, color: c }))}
@@ -97,7 +97,7 @@ function GoalModal({ isOpen, onClose, onSave, editData }) {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">Description</label>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Description</label>
               <textarea className="input resize-none" rows={2} placeholder="Optional notes..." value={form.description}
                 onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
             </div>
@@ -132,13 +132,13 @@ function AddAmountModal({ goal, onClose, onAdd }) {
       <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={e => e.target === e.currentTarget && onClose()}>
-        <motion.div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6"
+        <motion.div className="bg-white dark:bg-neutral-900 rounded-2xl w-full max-w-sm shadow-2xl p-6"
           initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-          <h2 className="text-lg font-bold text-slate-800 mb-1">Add to Goal</h2>
-          <p className="text-sm text-slate-500 mb-5">{goal.emoji} {goal.title} · ₹{remaining.toLocaleString("en-IN")} remaining</p>
+          <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-1">Add to Goal</h2>
+          <p className="text-sm text-neutral-500 mb-5">{goal.emoji} {goal.title} · ₹{remaining.toLocaleString("en-IN")} remaining</p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">Amount to Add (₹)</label>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Amount to Add (₹)</label>
               <input type="number" className="input" placeholder={`Max ₹${remaining.toLocaleString("en-IN")}`}
                 min="1" max={remaining} value={amount} onChange={e => setAmount(e.target.value)} required autoFocus />
             </div>
@@ -194,8 +194,8 @@ export default function Goals() {
     <div className="space-y-5 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Savings Goals</h1>
-          <p className="text-slate-500 text-sm">Track your financial dreams</p>
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Savings Goals</h1>
+          <p className="text-neutral-500 text-sm">Track your financial dreams</p>
         </div>
         <button onClick={() => setShowModal(true)} className="btn-primary flex items-center gap-2 text-sm">
           <Plus size={16} /> New Goal
@@ -205,15 +205,15 @@ export default function Goals() {
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         <div className="card text-center py-4">
-          <p className="text-xs text-slate-500 mb-1">Active Goals</p>
-          <p className="text-xl font-bold text-slate-800">{goals.filter(g => !g.isCompleted).length}</p>
+          <p className="text-xs text-neutral-500 mb-1">Active Goals</p>
+          <p className="text-xl font-bold text-neutral-900 dark:text-neutral-100">{goals.filter(g => !g.isCompleted).length}</p>
         </div>
         <div className="card text-center py-4">
-          <p className="text-xs text-slate-500 mb-1">Total Saved</p>
-          <p className="text-xl font-bold text-teal-600">₹{totalSaved.toLocaleString("en-IN")}</p>
+          <p className="text-xs text-neutral-500 mb-1">Total Saved</p>
+          <p className="text-xl font-bold text-green-500">₹{totalSaved.toLocaleString("en-IN")}</p>
         </div>
         <div className="card text-center py-4">
-          <p className="text-xs text-slate-500 mb-1">Completed 🎉</p>
+          <p className="text-xs text-neutral-500 mb-1">Completed 🎉</p>
           <p className="text-xl font-bold text-green-600">{completedCount}</p>
         </div>
       </div>
@@ -222,7 +222,7 @@ export default function Goals() {
       <div className="flex gap-2">
         {[{ l: "All", v: "all" }, { l: "Active", v: "active" }, { l: "Completed", v: "completed" }].map(f => (
           <button key={f.v} onClick={() => setFilter(f.v)}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${filter === f.v ? "bg-teal-600 text-white" : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"}`}>
+            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${filter === f.v ? "bg-green-500 text-white" : "bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900"}`}>
             {f.l}
           </button>
         ))}
@@ -251,25 +251,25 @@ export default function Goals() {
                       <span className="text-2xl">{goal.emoji}</span>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <p className="font-semibold text-slate-800 text-sm">{goal.title}</p>
+                          <p className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm">{goal.title}</p>
                           {isCompleted && <CheckCircle2 size={14} className="text-green-500" />}
                         </div>
-                        <p className="text-xs text-slate-400">{goal.category}</p>
+                        <p className="text-xs text-neutral-400">{goal.category}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
                       {!isCompleted && (
                         <button onClick={() => setAddAmountGoal(goal)}
-                          className="w-7 h-7 rounded-lg hover:bg-teal-50 flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors">
+                          className="w-7 h-7 rounded-lg hover:bg-green-500/10 flex items-center justify-center text-neutral-400 hover:text-green-500 transition-colors">
                           <PlusCircle size={14} />
                         </button>
                       )}
                       <button onClick={() => setEditGoal(goal)}
-                        className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-600 transition-colors">
+                        className="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center text-neutral-400 hover:text-blue-600 transition-colors">
                         <Pencil size={13} />
                       </button>
                       <button onClick={() => handleDelete(goal._id)}
-                        className="w-7 h-7 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors">
+                        className="w-7 h-7 rounded-lg hover:bg-red-50 flex items-center justify-center text-neutral-400 hover:text-red-500 transition-colors">
                         <Trash2 size={13} />
                       </button>
                     </div>
@@ -278,10 +278,10 @@ export default function Goals() {
                   {/* Progress */}
                   <div className="mb-3">
                     <div className="flex justify-between text-sm mb-1.5">
-                      <span className="text-slate-600">₹{(goal.savedAmount || 0).toLocaleString("en-IN")}</span>
-                      <span className="font-semibold text-slate-800">₹{goal.targetAmount.toLocaleString("en-IN")}</span>
+                      <span className="text-neutral-600 dark:text-neutral-400">₹{(goal.savedAmount || 0).toLocaleString("en-IN")}</span>
+                      <span className="font-semibold text-neutral-900 dark:text-neutral-100">₹{goal.targetAmount.toLocaleString("en-IN")}</span>
                     </div>
-                    <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
@@ -294,7 +294,7 @@ export default function Goals() {
                   </div>
 
                   {/* Meta */}
-                  <div className="flex items-center justify-between text-xs text-slate-400">
+                  <div className="flex items-center justify-between text-xs text-neutral-400">
                     {isCompleted ? (
                       <span className="text-green-600 font-semibold">🎉 Goal Completed!</span>
                     ) : (
@@ -306,7 +306,7 @@ export default function Goals() {
                           </span>
                         )}
                         {goal.monthlyNeeded && goal.daysLeft > 0 && (
-                          <span className="text-teal-600 font-medium">₹{goal.monthlyNeeded.toLocaleString("en-IN")}/mo</span>
+                          <span className="text-green-500 font-medium">₹{goal.monthlyNeeded.toLocaleString("en-IN")}/mo</span>
                         )}
                       </>
                     )}
@@ -318,11 +318,11 @@ export default function Goals() {
         </div>
       ) : (
         <div className="card text-center py-14">
-          <Target size={44} className="mx-auto text-slate-200 mb-3" />
-          <p className="font-semibold text-slate-600 mb-1">
+          <Target size={44} className="mx-auto text-neutral-700 mb-3" />
+          <p className="font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
             {filter === "completed" ? "No completed goals yet" : "No goals yet"}
           </p>
-          <p className="text-sm text-slate-400 mb-5">Set a savings goal to get started</p>
+          <p className="text-sm text-neutral-400 mb-5">Set a savings goal to get started</p>
           {filter !== "completed" && (
             <button onClick={() => setShowModal(true)} className="btn-primary text-sm">Create Your First Goal</button>
           )}

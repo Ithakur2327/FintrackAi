@@ -9,7 +9,7 @@ const CURRENCIES = ["INR", "USD", "EUR", "GBP", "AED", "SGD", "CAD", "AUD"];
 function Toast({ message, type }) {
   if (!message) return null;
   return (
-    <div className={`fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all ${type === "success" ? "bg-teal-600 text-white" : "bg-red-600 text-white"}`}>
+    <div className={`fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all ${type === "success" ? "bg-green-500 text-white" : "bg-red-600 text-white"}`}>
       {type === "success" ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
       {message}
     </div>
@@ -78,8 +78,8 @@ export default function Profile() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-800">Profile Settings</h1>
-        <p className="text-slate-500 text-sm mt-0.5">Manage your account and preferences</p>
+        <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Profile Settings</h1>
+        <p className="text-neutral-500 text-sm mt-0.5">Manage your account and preferences</p>
       </div>
 
       {/* Avatar section */}
@@ -88,9 +88,9 @@ export default function Profile() {
           {user?.name?.[0]?.toUpperCase() || "U"}
         </div>
         <div>
-          <p className="font-bold text-slate-800 text-lg">{user?.name}</p>
-          <p className="text-slate-500 text-sm">{user?.email}</p>
-          <span className="inline-flex items-center gap-1 mt-1.5 text-xs bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full font-medium">
+          <p className="font-bold text-neutral-900 dark:text-neutral-100 text-lg">{user?.name}</p>
+          <p className="text-neutral-500 text-sm">{user?.email}</p>
+          <span className="inline-flex items-center gap-1 mt-1.5 text-xs bg-green-500/10 text-green-400 px-2.5 py-1 rounded-full font-medium">
             <CheckCircle size={11} /> Active Account
           </span>
         </div>
@@ -99,38 +99,38 @@ export default function Profile() {
       {/* Profile Form */}
       <div className="card">
         <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center">
-            <User size={16} className="text-teal-600" />
+          <div className="w-8 h-8 bg-green-500/10 rounded-xl flex items-center justify-center">
+            <User size={16} className="text-green-500" />
           </div>
-          <h2 className="font-semibold text-slate-800">Personal Information</h2>
+          <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Personal Information</h2>
         </div>
 
         <form onSubmit={handleProfileSave} className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1.5">Full Name</label>
+            <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Full Name</label>
             <input type="text" className="input" value={profileForm.name}
               onChange={e => setProfileForm(p => ({ ...p, name: e.target.value }))} required />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1.5">Email Address</label>
+            <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Email Address</label>
             <div className="relative">
-              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
               <input type="email" className="input pl-9 bg-slate-50 cursor-not-allowed" value={user?.email} disabled />
             </div>
-            <p className="text-xs text-slate-400 mt-1">Email cannot be changed</p>
+            <p className="text-xs text-neutral-400 mt-1">Email cannot be changed</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">Currency</label>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Currency</label>
               <select className="input" value={profileForm.currency}
                 onChange={e => setProfileForm(p => ({ ...p, currency: e.target.value }))}>
                 {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">Monthly Budget Goal (₹)</label>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Monthly Budget Goal (₹)</label>
               <input type="number" className="input" placeholder="e.g. 30000" min="0"
                 value={profileForm.monthlyBudgetGoal}
                 onChange={e => setProfileForm(p => ({ ...p, monthlyBudgetGoal: e.target.value }))} />
@@ -150,13 +150,13 @@ export default function Profile() {
           <div className="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center">
             <Shield size={16} className="text-orange-600" />
           </div>
-          <h2 className="font-semibold text-slate-800">Change Password</h2>
+          <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Change Password</h2>
         </div>
 
         <form onSubmit={handlePasswordChange} className="space-y-4">
           {["currentPassword", "newPassword", "confirmPassword"].map((field, i) => (
             <div key={field}>
-              <label className="text-sm font-medium text-slate-700 block mb-1.5">
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">
                 {field === "currentPassword" ? "Current Password" : field === "newPassword" ? "New Password" : "Confirm New Password"}
               </label>
               <input type="password" className="input" placeholder="••••••••"

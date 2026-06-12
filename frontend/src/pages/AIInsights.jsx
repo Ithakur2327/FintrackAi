@@ -17,7 +17,7 @@ const INSIGHT_ICONS = {
 
 const INSIGHT_COLORS = {
   spending: { bg: "bg-orange-50", text: "text-orange-600", border: "border-orange-200" },
-  saving: { bg: "bg-teal-50", text: "text-teal-600", border: "border-teal-200" },
+  saving: { bg: "bg-green-500/10", text: "text-green-500", border: "border-green-500/30" },
   warning: { bg: "bg-red-50", text: "text-red-600", border: "border-red-200" },
   tip: { bg: "bg-blue-50", text: "text-blue-600", border: "border-blue-200" },
 };
@@ -29,7 +29,7 @@ const ALERT_STYLES = {
 };
 
 const SCORE_COLORS = {
-  Excellent: { color: "#0d9488", bg: "bg-teal-50", text: "text-teal-700" },
+  Excellent: { color: "#22c55e", bg: "bg-green-500/10", text: "text-green-400" },
   Good: { color: "#0891b2", bg: "bg-blue-50", text: "text-blue-700" },
   Fair: { color: "#eab308", bg: "bg-yellow-50", text: "text-yellow-700" },
   Poor: { color: "#ef4444", bg: "bg-red-50", text: "text-red-700" },
@@ -64,8 +64,8 @@ function ScoreGauge({ score, label }) {
             transition={{ duration: 1.2, ease: "easeOut" }} />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center translate-y-2">
-          <span className="text-3xl font-black text-slate-800">{score}</span>
-          <span className="text-xs text-slate-400">/100</span>
+          <span className="text-3xl font-black text-neutral-900 dark:text-neutral-100">{score}</span>
+          <span className="text-xs text-neutral-400">/100</span>
         </div>
       </div>
       <span className={`text-sm font-bold px-3 py-1 rounded-full ${config.bg} ${config.text}`}>{label}</span>
@@ -124,9 +124,9 @@ export default function AIInsights() {
             <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center">
               <Sparkles size={14} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">AI Insights</h1>
+            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">AI Insights</h1>
           </div>
-          <p className="text-slate-500 text-sm">Powered by Claude AI — personalized financial analysis</p>
+          <p className="text-neutral-500 text-sm">Powered by Claude AI — personalized financial analysis</p>
         </div>
         <button onClick={fetchInsights} disabled={loading}
           className="flex items-center gap-2 btn-secondary text-sm">
@@ -136,10 +136,10 @@ export default function AIInsights() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-slate-200">
+      <div className="flex gap-2 border-b border-neutral-200 dark:border-neutral-700">
         {[{ l: "Insights", v: "insights", icon: Sparkles }, { l: "AI Chat", v: "chat", icon: Bot }].map(t => (
           <button key={t.v} onClick={() => setActiveTab(t.v)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 transition-all -mb-px ${activeTab === t.v ? "border-teal-600 text-teal-600" : "border-transparent text-slate-500 hover:text-slate-700"}`}>
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 transition-all -mb-px ${activeTab === t.v ? "border-teal-600 text-green-500" : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-300"}`}>
             <t.icon size={15} /> {t.l}
           </button>
         ))}
@@ -155,8 +155,8 @@ export default function AIInsights() {
                   <Sparkles size={28} className="text-white animate-pulse" />
                 </div>
                 <div className="text-center">
-                  <p className="font-semibold text-slate-700">Analyzing your finances...</p>
-                  <p className="text-sm text-slate-400 mt-1">Claude AI is reviewing your transactions</p>
+                  <p className="font-semibold text-neutral-700 dark:text-neutral-300">Analyzing your finances...</p>
+                  <p className="text-sm text-neutral-400 mt-1">Claude AI is reviewing your transactions</p>
                 </div>
                 <div className="flex gap-1.5">
                   {[0, 1, 2].map(i => (
@@ -185,7 +185,7 @@ export default function AIInsights() {
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <ScoreGauge score={insights.score} label={insights.scoreLabel} />
                   <div className="flex-1 text-center sm:text-left">
-                    <p className="text-sm font-semibold text-teal-300 uppercase tracking-wide mb-2">Financial Health Score</p>
+                    <p className="text-sm font-semibold text-green-300 uppercase tracking-wide mb-2">Financial Health Score</p>
                     <p className="text-white/90 text-sm leading-relaxed">{insights.summary}</p>
                     {insights.generatedAt && (
                       <p className="text-xs text-white/40 mt-3">
@@ -214,8 +214,8 @@ export default function AIInsights() {
               {/* Insights Grid */}
               {insights.insights?.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                    <Zap size={16} className="text-teal-600" /> Key Insights
+                  <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+                    <Zap size={16} className="text-green-500" /> Key Insights
                   </h3>
                   <div className="grid sm:grid-cols-2 gap-3">
                     {insights.insights.map((insight, i) => {
@@ -233,10 +233,10 @@ export default function AIInsights() {
                               <span className={`text-xs px-1.5 py-0.5 rounded-full shrink-0 ${
                                 insight.impact === "High" ? "bg-red-100 text-red-600" :
                                   insight.impact === "Medium" ? "bg-yellow-100 text-yellow-600" :
-                                    "bg-slate-100 text-slate-600"
+                                    "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
                               }`}>{insight.impact}</span>
                             </div>
-                            <p className="text-xs text-slate-600 mt-1 leading-relaxed">{insight.description}</p>
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">{insight.description}</p>
                           </div>
                         </motion.div>
                       );
@@ -248,17 +248,17 @@ export default function AIInsights() {
               {/* Recommendations */}
               {insights.recommendations?.length > 0 && (
                 <div className="card">
-                  <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                    <Shield size={16} className="text-teal-600" /> Recommendations
+                  <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+                    <Shield size={16} className="text-green-500" /> Recommendations
                   </h3>
                   <ul className="space-y-2.5">
                     {insights.recommendations.map((rec, i) => (
                       <motion.li key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}
                         className="flex items-start gap-2.5">
                         <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center shrink-0 mt-0.5">
-                          <span className="text-xs font-bold text-teal-700">{i + 1}</span>
+                          <span className="text-xs font-bold text-green-400">{i + 1}</span>
                         </div>
-                        <p className="text-sm text-slate-700 leading-relaxed">{rec}</p>
+                        <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">{rec}</p>
                       </motion.li>
                     ))}
                   </ul>
@@ -267,24 +267,24 @@ export default function AIInsights() {
 
               {/* Monthly Target */}
               {insights.monthlyTarget && (
-                <div className="card border border-teal-100 bg-teal-50/50">
+                <div className="card border border-teal-100 bg-green-500/10/50">
                   <h3 className="font-semibold text-teal-800 mb-3 flex items-center gap-2">
-                    <TrendingUp size={16} className="text-teal-600" /> Monthly Savings Target
+                    <TrendingUp size={16} className="text-green-500" /> Monthly Savings Target
                   </h3>
                   <div className="flex items-center justify-between mb-4">
-                    <p className="text-sm text-teal-700">Suggested monthly savings</p>
-                    <p className="text-xl font-black text-teal-700">
+                    <p className="text-sm text-green-400">Suggested monthly savings</p>
+                    <p className="text-xl font-black text-green-400">
                       ₹{(insights.monthlyTarget.savingsGoal || 0).toLocaleString("en-IN")}
                     </p>
                   </div>
                   {insights.monthlyTarget.budgetCuts?.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Suggested Budget Cuts</p>
+                      <p className="text-xs font-semibold text-green-500 uppercase tracking-wide">Suggested Budget Cuts</p>
                       {insights.monthlyTarget.budgetCuts.map((cut, i) => (
-                        <div key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2.5 border border-teal-100">
+                        <div key={i} className="flex items-center gap-3 bg-white dark:bg-neutral-900 rounded-xl px-3 py-2.5 border border-teal-100">
                           <div className="flex-1">
-                            <p className="text-sm font-semibold text-slate-700">{cut.category}</p>
-                            <p className="text-xs text-slate-500">{cut.reason}</p>
+                            <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{cut.category}</p>
+                            <p className="text-xs text-neutral-500">{cut.reason}</p>
                           </div>
                           <p className="text-sm font-bold text-orange-600 shrink-0">
                             {typeof cut.suggestion === "number" ? `-₹${cut.suggestion.toLocaleString("en-IN")}` : cut.suggestion}
@@ -301,12 +301,12 @@ export default function AIInsights() {
       ) : (
         /* AI Chat Tab */
         <div className="card flex flex-col" style={{ minHeight: "70vh" }}>
-          <div className="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
+          <div className="flex items-center gap-3 pb-4 border-b border-neutral-200 dark:border-neutral-800 mb-4">
             <div className="w-9 h-9 bg-gradient-to-br from-teal-400 to-teal-700 rounded-xl flex items-center justify-center">
               <Bot size={18} className="text-white" />
             </div>
             <div>
-              <p className="font-semibold text-slate-800 text-sm">FinTrackAI Assistant</p>
+              <p className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm">FinTrackAI Assistant</p>
               <p className="text-xs text-green-500 font-medium">● Online</p>
             </div>
           </div>
@@ -317,11 +317,11 @@ export default function AIInsights() {
               <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                 className={`flex gap-2.5 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${msg.role === "ai" ? "bg-teal-100" : "bg-slate-200"}`}>
-                  {msg.role === "ai" ? <Bot size={14} className="text-teal-600" /> : <User size={14} className="text-slate-600" />}
+                  {msg.role === "ai" ? <Bot size={14} className="text-green-500" /> : <User size={14} className="text-neutral-600 dark:text-neutral-400" />}
                 </div>
                 <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${msg.role === "ai"
-                  ? "bg-slate-100 text-slate-800 rounded-tl-none"
-                  : "bg-teal-600 text-white rounded-tr-none"}`}>
+                  ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-tl-none"
+                  : "bg-green-500 text-white rounded-tr-none"}`}>
                   {msg.text}
                 </div>
               </motion.div>
@@ -329,9 +329,9 @@ export default function AIInsights() {
             {chatLoading && (
               <div className="flex gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Bot size={14} className="text-teal-600" />
+                  <Bot size={14} className="text-green-500" />
                 </div>
-                <div className="bg-slate-100 rounded-2xl rounded-tl-none px-4 py-3 flex gap-1">
+                <div className="bg-neutral-100 dark:bg-neutral-800 rounded-2xl rounded-tl-none px-4 py-3 flex gap-1">
                   {[0, 1, 2].map(i => (
                     <div key={i} className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
@@ -342,11 +342,11 @@ export default function AIInsights() {
 
           {/* Quick Questions */}
           <div className="mb-3">
-            <p className="text-xs text-slate-400 mb-2 font-medium">Quick questions:</p>
+            <p className="text-xs text-neutral-400 mb-2 font-medium">Quick questions:</p>
             <div className="flex flex-wrap gap-2">
               {QUICK_QUESTIONS.map(q => (
                 <button key={q} onClick={() => sendChat(q)}
-                  className="text-xs px-3 py-1.5 bg-slate-100 hover:bg-teal-50 hover:text-teal-700 rounded-full text-slate-600 transition-all flex items-center gap-1">
+                  className="text-xs px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-green-500/10 hover:text-green-400 rounded-full text-neutral-600 dark:text-neutral-400 transition-all flex items-center gap-1">
                   <ChevronRight size={10} /> {q}
                 </button>
               ))}
@@ -354,12 +354,12 @@ export default function AIInsights() {
           </div>
 
           {/* Input */}
-          <div className="flex items-center gap-2 border-t border-slate-100 pt-4">
+          <div className="flex items-center gap-2 border-t border-neutral-200 dark:border-neutral-800 pt-4">
             <input type="text" className="input flex-1" placeholder="Ask about your finances..."
               value={chatInput} onChange={e => setChatInput(e.target.value)}
               onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendChat()} />
             <button onClick={() => sendChat()} disabled={chatLoading || !chatInput.trim()}
-              className="w-10 h-10 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 rounded-xl flex items-center justify-center transition-all shrink-0">
+              className="w-10 h-10 bg-green-500 hover:bg-teal-700 disabled:opacity-50 rounded-xl flex items-center justify-center transition-all shrink-0">
               <Send size={15} className="text-white" />
             </button>
           </div>
