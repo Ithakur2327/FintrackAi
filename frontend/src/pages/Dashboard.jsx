@@ -156,7 +156,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── Time range ── */}
-      <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-1 w-fit"
+      <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-1 w-fit max-w-full overflow-x-auto no-visible-scrollbar"
         style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
         {[
           { label: "Today", value: "daily"   },

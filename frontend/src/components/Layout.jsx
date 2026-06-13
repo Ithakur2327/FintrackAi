@@ -9,7 +9,7 @@ export default function Layout() {
       <div className="relative z-20">
         <Sidebar />
       </div>
-      <main className="flex-1 overflow-y-auto relative">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
         {/* Grid pattern */}
         <div className="fixed inset-0 grid-bg opacity-100 pointer-events-none z-0" />
         {/* Soft vignette — top fade only */}

@@ -248,7 +248,7 @@
     @apply bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white;
   }
   .sidebar-link-inactive {
-    @apply text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 hover:shadow-sm;
+    @apply text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white hover:shadow-sm;
   }
 
   /* ── AI Insights moving border — works in both themes ── */

@@ -34,7 +34,8 @@ const DesktopSidebar = ({ children }) => {
     <motion.div
       className="h-full px-2 py-4 hidden md:flex md:flex-col bg-[#f5f5f7] dark:bg-neutral-950 border-r border-neutral-200 dark:border-neutral-900 shrink-0"
       animate={{ width: animate ? (open ? "220px" : "56px") : "220px" }}
-      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+      transition={{ duration: 0.25, ease: [0.25, 1, 0.5, 1] }}
+      style={{ willChange: "width" }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
@@ -104,29 +105,23 @@ const SidebarLink = ({ item, mobile = false, onClose }) => {
           className={`shrink-0 transition-colors ${
             isActive
               ? "text-neutral-900 dark:text-white"
-              : "text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100"
+              : "text-neutral-600 dark:text-neutral-400 group-hover:text-black dark:group-hover:text-white"
           }`}
         />
       </div>
 
-      <motion.span
-        animate={{
-          display: animate ? (showLabel ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (showLabel ? 1 : 0) : 1,
-        }}
-        transition={{ duration: 0.1 }}
-        className="text-sm font-medium whitespace-pre tracking-tight flex-1 text-neutral-700 dark:text-neutral-300"
+      <span
+        className={`text-sm font-medium whitespace-pre tracking-tight flex-1 text-neutral-700 dark:text-neutral-300 transition-opacity duration-150 ${
+          showLabel ? "opacity-100" : "opacity-0 hidden"
+        }`}
       >
         {item.label}
-      </motion.span>
+      </span>
 
       {item.badge && showLabel && (
-        <motion.span
-          animate={{ opacity: showLabel ? 1 : 0 }}
-          className="text-[10px] font-bold bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 px-1.5 py-0.5 rounded-md"
-        >
+        <span className="text-[10px] font-bold bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 px-1.5 py-0.5 rounded-md">
           {item.badge}
-        </motion.span>
+        </span>
       )}
 
       {!mobile && !showLabel && (
@@ -159,15 +154,9 @@ const SidebarContent = ({ mobile = false, onClose }) => {
       {/* Logo */}
       <div className={`flex items-center gap-2.5 px-2 py-3 mb-2 ${!showLabels && !mobile ? "justify-center" : ""}`}>
         <LogoMark size={26} />
-        <motion.div
-          animate={{
-            display: animate ? (showLabels ? "block" : "none") : "block",
-            opacity: animate ? (showLabels ? 1 : 0) : 1,
-          }}
-          transition={{ duration: 0.1 }}
-        >
+        <div className={`transition-opacity duration-150 ${showLabels ? "opacity-100" : "opacity-0 hidden"}`}>
           <p className="font-bold text-neutral-900 dark:text-white text-sm tracking-tight">Fintrack</p>
-        </motion.div>
+        </div>
       </div>
 
       {/* Nav */}
@@ -185,16 +174,13 @@ const SidebarContent = ({ mobile = false, onClose }) => {
         >
           <div className={`flex items-center justify-center shrink-0 ${!showLabels && !mobile ? "w-full" : ""}`}>
             {isDark
-              ? <Sun size={16} strokeWidth={2.25} className="shrink-0 text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100" />
-              : <Moon size={16} strokeWidth={2.25} className="shrink-0 text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100" />
+              ? <Sun size={16} strokeWidth={2.25} className="shrink-0 text-neutral-600 dark:text-neutral-400 group-hover:text-black dark:group-hover:text-white" />
+              : <Moon size={16} strokeWidth={2.25} className="shrink-0 text-neutral-600 dark:text-neutral-400 group-hover:text-black dark:group-hover:text-white" />
             }
           </div>
-          <motion.span
-            animate={{ display: animate ? (showLabels ? "inline-block" : "none") : "inline-block", opacity: animate ? (showLabels ? 1 : 0) : 1 }}
-            className="text-sm font-medium whitespace-pre text-neutral-600 dark:text-neutral-400"
-          >
+          <span className={`text-sm font-medium whitespace-pre text-neutral-600 dark:text-neutral-400 transition-opacity duration-150 ${showLabels ? "opacity-100" : "opacity-0 hidden"}`}>
             {isDark ? "Light mode" : "Dark mode"}
-          </motion.span>
+          </span>
         </button>
 
         <button
@@ -204,12 +190,9 @@ const SidebarContent = ({ mobile = false, onClose }) => {
           <div className={`flex items-center justify-center shrink-0 ${!showLabels && !mobile ? "w-full" : ""}`}>
             <LogOut size={16} strokeWidth={2.25} className="shrink-0" />
           </div>
-          <motion.span
-            animate={{ display: animate ? (showLabels ? "inline-block" : "none") : "inline-block", opacity: animate ? (showLabels ? 1 : 0) : 1 }}
-            className="text-sm font-medium whitespace-pre"
-          >
+          <span className={`text-sm font-medium whitespace-pre transition-opacity duration-150 ${showLabels ? "opacity-100" : "opacity-0 hidden"}`}>
             Sign out
-          </motion.span>
+          </span>
         </button>
       </div>
     </div>

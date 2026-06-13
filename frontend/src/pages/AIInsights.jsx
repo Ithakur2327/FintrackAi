@@ -98,12 +98,9 @@ export default function AIInsights() {
     <div className="space-y-5 animate-fade-in">
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black tracking-tight text-neutral-900 dark:text-neutral-50">AI Insights</h1>
-          <p className="text-sm text-neutral-400 mt-0.5">Powered by Claude — personalized financial analysis</p>
-        </div>
-        <AskAIButton onClick={fetchInsights} disabled={loading} duration={1.6}>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <h1 className="text-2xl font-black tracking-tight text-neutral-900 dark:text-neutral-50">AI Insights</h1>
+        <AskAIButton onClick={fetchInsights} disabled={loading} duration={1.6} className="shrink-0">
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
           {loading ? "Analyzing…" : "Refresh"}
         </AskAIButton>
@@ -166,10 +163,10 @@ export default function AIInsights() {
             <motion.div key="insights" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} className="space-y-5">
 
               {/* Score hero */}
-              <div className="ai-border-card bg-neutral-950 dark:bg-neutral-950 border border-neutral-800 rounded-2xl p-5 relative overflow-hidden">
-                <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="ai-border-card bg-neutral-950 dark:bg-neutral-950 border border-neutral-800 rounded-2xl p-4 sm:p-5 relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                   <ScoreGauge score={insights.score} />
-                  <div className="flex-1 text-center sm:text-left">
+                  <div className="flex-1 text-center sm:text-left min-w-0">
                     <p className="section-label text-neutral-600 mb-2">Financial Health Score</p>
                     <p className="text-neutral-200 text-sm leading-relaxed">{insights.summary}</p>
                     {insights.generatedAt && (
@@ -282,7 +279,7 @@ export default function AIInsights() {
 
       {/* ── Chat Tab ── */}
       {activeTab === "chat" && (
-        <div className="card flex flex-col" style={{ minHeight: "70vh" }}>
+        <div className="card flex flex-col h-[75vh] sm:h-auto sm:min-h-[70vh]">
           {/* Chat header */}
           <div className="flex items-center gap-3 pb-4 mb-4 border-b border-neutral-100 dark:border-neutral-800">
             <div className="w-9 h-9 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-center">
@@ -298,7 +295,7 @@ export default function AIInsights() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 space-y-4 overflow-y-auto mb-4 min-h-[300px] max-h-[440px] pr-1 no-visible-scrollbar">
+          <div className="flex-1 space-y-4 overflow-y-auto mb-4 min-h-[200px] sm:min-h-[300px] sm:max-h-[440px] pr-1 no-visible-scrollbar">
             {chatMessages.map((msg,i) => (
               <motion.div key={i} initial={{opacity:0,y:5}} animate={{opacity:1,y:0}}
                 className={`flex gap-2.5 ${msg.role==="user"?"flex-row-reverse":""}`}>
