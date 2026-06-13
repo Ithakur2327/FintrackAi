@@ -12,6 +12,15 @@ const LogoMark = () => (
   </svg>
 );
 
+const GoogleIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+    <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.859-3.048.859-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+    <path d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
+    <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+  </svg>
+);
+
 export default function Login() {
   const { persistAuth, apiBase } = useAuth();
   const navigate = useNavigate();
@@ -32,11 +41,19 @@ export default function Login() {
     } finally { setLoading(false); }
   };
 
+  const handleGoogleLogin = () => {
+    // Redirect to Google OAuth — backend should implement /auth/google
+    window.location.href = `${apiBase}/auth/google`;
+  };
+
   return (
     <div className="min-h-screen bg-[#f5f5f7] dark:bg-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Grid background */}
       <div className="absolute inset-0 grid-bg opacity-100 dark:opacity-40" />
       <div className="absolute inset-0 bg-[#f5f5f7] dark:bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      {/* Subtle accents */}
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative w-full max-w-md">
         <div className="text-center mb-8">
@@ -48,33 +65,50 @@ export default function Login() {
         </div>
 
         <div className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-2xl p-6 sm:p-8"
-          style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.6)" }}>
+          style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.12)" }}>
           <h2 className="text-xl font-black text-neutral-900 dark:text-neutral-50 mb-1">Welcome back</h2>
           <p className="text-neutral-500 text-sm mb-6">Sign in to your account</p>
 
+          {/* Google Login */}
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 text-sm font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-150 mb-5"
+            style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+          >
+            <GoogleIcon />
+            Continue with Google
+          </button>
+
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex-1 h-px bg-neutral-200 dark:bg-neutral-800" />
+            <span className="text-xs text-neutral-400 font-medium">or</span>
+            <div className="flex-1 h-px bg-neutral-200 dark:bg-neutral-800" />
+          </div>
+
           {error && (
-            <div className="flex items-center gap-2 bg-red-50 dark:bg-neutral-900 border border-red-200 dark:border-neutral-700 text-red-600 dark:text-neutral-300 text-sm px-4 py-3 rounded-xl mb-5">
+            <div className="flex items-center gap-2 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-sm px-4 py-3 rounded-xl mb-5">
               <AlertCircle size={15} className="shrink-0" />{error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-semibold text-neutral-400 block mb-1.5">Email</label>
+              <label className="text-sm font-semibold text-neutral-600 dark:text-neutral-400 block mb-1.5">Email</label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
+                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                 <input type="email" className="input pl-10" placeholder="you@example.com"
                   value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} required />
               </div>
             </div>
             <div>
-              <label className="text-sm font-semibold text-neutral-400 block mb-1.5">Password</label>
+              <label className="text-sm font-semibold text-neutral-600 dark:text-neutral-400 block mb-1.5">Password</label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-600" />
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                 <input type={showPass ? "text" : "password"} className="input pl-10 pr-10" placeholder="••••••••"
                   value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} required />
                 <button type="button" onClick={() => setShowPass(p => !p)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300">
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors">
                   {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
@@ -83,7 +117,7 @@ export default function Login() {
             <div className="flex items-center gap-2">
               <input type="checkbox" id="remember" checked={form.remember}
                 onChange={e => setForm(p => ({ ...p, remember: e.target.checked }))}
-                className="w-4 h-4 rounded accent-white" />
+                className="w-4 h-4 rounded accent-neutral-900 dark:accent-white" />
               <label htmlFor="remember" className="text-sm text-neutral-500 cursor-pointer">Remember me</label>
             </div>
 
@@ -97,9 +131,9 @@ export default function Login() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-neutral-600 mt-6">
+          <p className="text-center text-sm text-neutral-500 mt-6">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-neutral-900 dark:text-white font-semibold hover:text-neutral-300 transition-colors">
+            <Link to="/signup" className="text-neutral-900 dark:text-white font-semibold hover:underline transition-colors">
               Create one free
             </Link>
           </p>

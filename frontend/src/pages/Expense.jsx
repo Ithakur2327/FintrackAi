@@ -11,7 +11,7 @@ import { MOCK_MODE, mockExpenses, mockExpenseMeta } from "../mock/data.js";
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 const COLORS = ["#f97316","#6366f1","#0891b2","#8b5cf6","#ec4899","#eab308","#14b8a6"];
 const CATEGORIES = ["All","Food","Housing","Transport","Shopping","Entertainment","Utilities","Healthcare","Education","Travel","Other"];
-const tooltipStyle = { borderRadius: 10, background: "#171717", border: "1px solid #404040", color: "#fafafa", fontSize: 12 };
+const tooltipStyle = { borderRadius: 10, background: "var(--tooltip-bg, #171717)", border: "1px solid #404040", color: "#fafafa", fontSize: 12 };
 
 export default function Expense() {
   const [expenses, setExpenses]   = useState([]);
@@ -65,7 +65,7 @@ export default function Expense() {
   const avgExpense = expenses.length > 0 ? Math.round((meta.totalAmount || 0) / expenses.length) : 0;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 animate-fade-in">
       {/* Header */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
@@ -130,8 +130,8 @@ export default function Expense() {
       {/* Charts */}
       {view === "chart" && (
         <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-          <div className="card">
-            <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4 text-sm">Spending by Category</h3>
+          <div className="card-big">
+          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4 text-sm">Spending by Category</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie data={byCategory} cx="50%" cy="50%" outerRadius={75} dataKey="value" nameKey="name"
@@ -142,8 +142,8 @@ export default function Expense() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="card">
-            <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4 text-sm">Daily Spending</h3>
+          <div className="card-big">
+          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4 text-sm">Daily Spending</h3>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={chartData}>
                 <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#737373" }} axisLine={false} tickLine={false} />

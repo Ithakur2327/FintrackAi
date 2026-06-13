@@ -49,6 +49,19 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
+// Fixed donut tooltip — works in both light and dark
+const DonutTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null;
+  const d = payload[0];
+  return (
+    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-3 shadow-2xl text-xs">
+      <p className="font-semibold text-neutral-800 dark:text-neutral-100 mb-0.5">{d.name}</p>
+      <p className="text-neutral-500 dark:text-neutral-400">₹{Number(d.value).toLocaleString("en-IN")}</p>
+      <p className="text-neutral-400 dark:text-neutral-500">{d.payload?.percent}%</p>
+    </div>
+  );
+};
+
 const SectionHeader = ({ title, right }) => (
   <div className="flex items-center justify-between mb-4">
     <h3 className="text-sm font-bold text-neutral-800 dark:text-neutral-200 tracking-tight">{title}</h3>
@@ -69,9 +82,7 @@ export default function Dashboard() {
   const fetchDashboard = useCallback(async () => {
     try {
       setLoading(true);
-      // ── MOCK: delete the next 3 lines when backend is ready ──
       if (MOCK_MODE) { setData(mockDashboard[range] || mockDashboard.monthly); setLoading(false); return; }
-      // ── END MOCK ──
       const res = await axios.get(`${API_BASE}/dashboard?range=${range}`);
       setData(res.data.data);
     } catch (err) { console.error("Dashboard fetch error:", err); }
@@ -91,6 +102,10 @@ export default function Dashboard() {
   const expenseStroke = isDark ? "#94a3b8" : "#94a3b8";
   const axisColor     = isDark ? "#404040" : "#d4d4d8";
 
+  const savingsRate = summary.savingsRate || 0;
+  const savingsColor = savingsRate >= 20 ? "bg-emerald-500" : savingsRate >= 10 ? "bg-amber-400" : "bg-neutral-400";
+  const savingsTextColor = savingsRate >= 20 ? "text-emerald-600 dark:text-emerald-400" : savingsRate >= 10 ? "text-amber-500 dark:text-amber-400" : "text-neutral-500 dark:text-neutral-400";
+
   if (loading && !data) {
     return (
       <div className="space-y-4">
@@ -106,7 +121,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 animate-fade-in">
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
@@ -154,18 +169,18 @@ export default function Dashboard() {
         ].map(t => <TimeBtn key={t.value} {...t} active={range === t.value} onClick={setRange} />)}
       </div>
 
-      {/* ── Stats cards ── */}
+      {/* ── Stats cards (small — GlowingEffect moving border) ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatsCard title="Income"       value={summary.totalIncome   || 0} change={summary.incomeChange}  icon={TrendingUp} />
         <StatsCard title="Expenses"     value={summary.totalExpense  || 0} change={summary.expenseChange} icon={TrendingDown} />
-        <StatsCard title="Savings"      value={summary.savings       || 0} icon={Wallet}    subtitle={`${summary.savingsRate || 0}% rate`} />
+        <StatsCard title="Savings"      value={summary.savings       || 0} icon={Wallet}    subtitle={`${savingsRate}% rate`} />
         <StatsCard title="Transactions" value={summary.transactionCount || 0} icon={BarChart2} prefix="" />
       </div>
 
-      {/* ── Charts ── */}
+      {/* ── Charts — big cards, 3D hover only, no moving border ── */}
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Area chart */}
-        <div className="card">
+        <div className="card-big">
           <SectionHeader
             title="Monthly Trend"
             right={<span className="text-xs text-neutral-400">Income vs Expenses</span>}
@@ -192,7 +207,7 @@ export default function Dashboard() {
         </div>
 
         {/* Pie chart */}
-        <div className="card">
+        <div className="card-big">
           <SectionHeader title="Expense Breakdown" />
           {data?.expenseDistribution?.length > 0 ? (
             <div className="flex items-center gap-4">
@@ -208,10 +223,7 @@ export default function Dashboard() {
                       <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    formatter={(v) => `₹${v.toLocaleString("en-IN")}`}
-                    contentStyle={{ borderRadius: 10, background: "#0a0a0a", border: "1px solid #262626", color: "#fff", fontSize: 12 }}
-                  />
+                  <Tooltip content={<DonutTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="flex-1 space-y-2">
@@ -232,41 +244,47 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Savings rate bar ── */}
-      {summary.savingsRate > 0 && (
-        <div className="card">
+      {/* ── Savings rate — themed properly ── */}
+      {savingsRate > 0 && (
+        <div className="card-big">
           <SectionHeader
             title="Savings Rate"
             right={
-              <span className={`text-sm font-black tabular-nums ${
-                summary.savingsRate >= 20 ? "text-emerald-600 dark:text-emerald-400" :
-                summary.savingsRate >= 10 ? "text-amber-500" : "text-red-500"
-              }`}>
-                {summary.savingsRate}%
+              <span className={`text-sm font-black tabular-nums ${savingsTextColor}`}>
+                {savingsRate}%
               </span>
             }
           />
           <div className="h-2.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: `${Math.min(summary.savingsRate, 100)}%` }}
+              animate={{ width: `${Math.min(savingsRate, 100)}%` }}
               transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-              className={`h-full rounded-full ${
-                summary.savingsRate >= 20 ? "bg-emerald-500" :
-                summary.savingsRate >= 10 ? "bg-amber-400" : "bg-neutral-500"
-              }`}
+              className={`h-full rounded-full ${savingsColor}`}
             />
           </div>
-          <p className="text-xs text-neutral-400 mt-2">
-            {summary.savingsRate >= 20 ? "Great saving habit! 🎉" :
-             summary.savingsRate >= 10 ? "You're on track 👍" :
-             "Try to save more this period 💪"}
-          </p>
+          <div className="flex items-center justify-between mt-3">
+            <p className="text-xs text-neutral-400 dark:text-neutral-500">
+              {savingsRate >= 20 ? "Great saving habit! 🎉" :
+               savingsRate >= 10 ? "You're on track 👍" :
+               "Try to save more this period 💪"}
+            </p>
+            <div className="flex items-center gap-3 text-xs text-neutral-400">
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-neutral-200 dark:bg-neutral-700 inline-block" />
+                Target: 20%
+              </span>
+              <span className={`flex items-center gap-1 font-semibold ${savingsTextColor}`}>
+                <span className={`w-2 h-2 rounded-full inline-block ${savingsColor}`} />
+                Yours: {savingsRate}%
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
       {/* ── Recent transactions ── */}
-      <div className="card">
+      <div className="card-big">
         <SectionHeader
           title="Recent Transactions"
           right={<span className="text-xs text-neutral-400 tabular-nums">{data?.recentTransactions?.length || 0} total</span>}

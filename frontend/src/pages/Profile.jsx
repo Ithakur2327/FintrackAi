@@ -83,7 +83,7 @@ export default function Profile() {
       </div>
 
       {/* Avatar section */}
-      <div className="card flex items-center gap-5">
+      <div className="card-big flex items-center gap-5">
         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-700 flex items-center justify-center text-white text-2xl font-black shrink-0">
           {user?.name?.[0]?.toUpperCase() || "U"}
         </div>
@@ -97,7 +97,7 @@ export default function Profile() {
       </div>
 
       {/* Profile Form */}
-      <div className="card">
+      <div className="card-big">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-green-500/10 rounded-xl flex items-center justify-center">
             <User size={16} className="text-green-500" />
@@ -145,7 +145,7 @@ export default function Profile() {
       </div>
 
       {/* Password Form */}
-      <div className="card">
+      <div className="card-big">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center">
             <Shield size={16} className="text-orange-600" />

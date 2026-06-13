@@ -166,7 +166,7 @@ export default function AIInsights() {
             <motion.div key="insights" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} className="space-y-5">
 
               {/* Score hero */}
-              <div className="card bg-neutral-950 border-neutral-800">
+              <div className="ai-border-card bg-neutral-950 dark:bg-neutral-950 border border-neutral-800 rounded-2xl p-5 relative overflow-hidden">
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <ScoreGauge score={insights.score} />
                   <div className="flex-1 text-center sm:text-left">
