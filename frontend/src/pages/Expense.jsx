@@ -12,7 +12,7 @@ import { useTheme } from "../App.jsx";
 import { MOCK_MODE, mockExpenses, mockExpenseMeta } from "../mock/data.js";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
-const COLORS = ["#f97316","#6366f1","#0891b2","#8b5cf6","#ec4899","#eab308","#14b8a6"];
+const COLORS = ["#3b82f6","#6366f1","#0891b2","#8b5cf6","#ec4899","#eab308","#14b8a6"];
 const CATEGORIES = ["All","Food","Housing","Transport","Shopping","Entertainment","Utilities","Healthcare","Education","Travel","Other"];
 
 const RANGES = [
@@ -55,7 +55,7 @@ const CustomTooltip = ({ active, payload, label, isDark }) => {
       fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
     }}>
       <p style={{ color: isDark ? "#8e8e93" : "#6b7280", marginBottom: 2 }}>{label}</p>
-      <p style={{ fontWeight: 700, color: "#f97316" }}>
+      <p style={{ fontWeight: 700, color: "#3b82f6" }}>
         ₹{Number(payload[0].value).toLocaleString("en-IN")}
       </p>
     </div>
@@ -74,7 +74,7 @@ const PieTooltip = ({ active, payload, isDark }) => {
       color: isDark ? "#f5f5f5" : "#111",
     }}>
       <p style={{ fontWeight: 600 }}>{payload[0].name}</p>
-      <p style={{ color: "#f97316", fontWeight: 700 }}>₹{Number(payload[0].value).toLocaleString("en-IN")}</p>
+      <p style={{ color: "#3b82f6", fontWeight: 700 }}>₹{Number(payload[0].value).toLocaleString("en-IN")}</p>
     </div>
   );
 };
@@ -147,7 +147,7 @@ export default function Expense() {
       {/* Quick Stats */}
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
         {[
-          { label: "Total Spent",   value: `₹${(meta.totalAmount || 0).toLocaleString("en-IN")}`, cls: "text-orange-500" },
+          { label: "Total Spent",   value: `₹${(meta.totalAmount || 0).toLocaleString("en-IN")}`, cls: "text-blue-500" },
           { label: "Highest Entry", value: `₹${highestExpense.toLocaleString("en-IN")}`,           cls: "text-red-500" },
           { label: "Average",       value: `₹${avgExpense.toLocaleString("en-IN")}`,               cls: "text-indigo-500 dark:text-indigo-400" },
         ].map(s => (
@@ -164,7 +164,7 @@ export default function Expense() {
           <div className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl p-1">
             {RANGES.map(t => (
               <button key={t.v} onClick={() => setRange(t.v)}
-                className={`px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${range === t.v ? "bg-orange-500 text-white shadow-sm" : "text-neutral-500 hover:bg-white dark:hover:bg-neutral-700"}`}>
+                className={`px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${range === t.v ? "bg-blue-500 text-white shadow-sm" : "text-neutral-500 hover:bg-white dark:hover:bg-neutral-700"}`}>
                 {t.l}
               </button>
             ))}
@@ -194,7 +194,7 @@ export default function Expense() {
               <XAxis dataKey="date" tick={{ fontSize: 10, fill: axisColor, fontFamily: "-apple-system" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: axisColor, fontFamily: "-apple-system" }} axisLine={false} tickLine={false} tickFormatter={v => `₹${v >= 1000 ? (v/1000).toFixed(0)+"k" : v}`} />
               <Tooltip content={<CustomTooltip isDark={isDark} />} />
-              <Bar dataKey="amount" fill="#f97316" radius={[6,6,0,0]} />
+              <Bar dataKey="amount" fill="#3b82f6" radius={[6,6,0,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

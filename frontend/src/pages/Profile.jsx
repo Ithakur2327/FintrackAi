@@ -87,7 +87,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="space-y-5 max-w-2xl mx-auto animate-fade-in">
+    <div className="space-y-5 max-w-3xl mx-auto animate-fade-in">
       <Toast {...toast} />
 
       {/* Header */}

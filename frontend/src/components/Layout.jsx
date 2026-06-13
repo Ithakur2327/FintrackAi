@@ -14,7 +14,7 @@ export default function Layout() {
         <div className="fixed inset-0 grid-bg opacity-100 pointer-events-none z-0" />
         {/* Soft vignette — top fade only */}
         <div className="fixed inset-x-0 top-0 h-48 bg-gradient-to-b from-[#f5f5f7] dark:from-[#0a0a0a] to-transparent pointer-events-none z-0" />
-        <div className="relative z-10 max-w-5xl mx-auto p-3 sm:p-4 lg:p-6">
+        <div className="relative z-10 max-w-6xl mx-auto p-3 sm:p-4 lg:p-6">
           {/*
             KEY FIX: AnimatePresence mode="wait" + React Router Outlet milke broken tha.
             Jab route change hota tha, Outlet TURANT naya content render karta tha —
