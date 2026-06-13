@@ -7,7 +7,9 @@ export default function Layout() {
   const location = useLocation();
   return (
     <div className="flex h-screen bg-[#f5f5f7] dark:bg-[#0a0a0a] overflow-hidden">
-      <Sidebar />
+      <div className="relative z-20">
+        <Sidebar />
+      </div>
       <main className="flex-1 overflow-y-auto relative">
         {/* Grid pattern */}
         <div className="fixed inset-0 grid-bg opacity-100 pointer-events-none z-0" />

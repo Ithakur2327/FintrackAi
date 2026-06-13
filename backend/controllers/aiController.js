@@ -1,14 +1,47 @@
-import Anthropic from "@anthropic-ai/sdk";
 import Expense from "../models/expenseModel.js";
 import Income from "../models/incomeModel.js";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+// Groq offers a free, OpenAI-compatible chat completions API.
+// Supports either GROQ_API_KEY or ANTHROPIC_API_KEY (legacy name) env var.
+const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.ANTHROPIC_API_KEY;
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+async function callGroq({ system, prompt, maxTokens = 1500 }) {
+  if (!GROQ_API_KEY) {
+    throw new Error("Missing GROQ_API_KEY (or ANTHROPIC_API_KEY) in backend .env");
+  }
+
+  const messages = [];
+  if (system) messages.push({ role: "system", content: system });
+  messages.push({ role: "user", content: prompt });
+
+  const res = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      max_tokens: maxTokens,
+      messages,
+    }),
+  });
+
+  if (!res.ok) {
+    const errBody = await res.text().catch(() => "");
+    throw new Error(`Groq API error (${res.status}): ${errBody.slice(0, 300)}`);
+  }
+
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content?.trim() || "";
+}
 
 export const getAIInsights = async (req, res) => {
   try {
     const userId = req.user._id;
     const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOf3Months = new Date(now.getFullYear(), now.getMonth() - 3, 1);
 
     const [expenses, incomes] = await Promise.all([
@@ -47,7 +80,7 @@ Financial Summary (${summary.period}):
 - Expense Breakdown by Category: ${JSON.stringify(summary.categoryBreakdown, null, 2)}
 - Total Transactions: ${summary.transactionCount}
 
-Provide exactly this JSON structure (respond ONLY with valid JSON, no markdown):
+Provide exactly this JSON structure (respond ONLY with valid JSON, no markdown, no code fences):
 {
   "score": <financial health score 0-100>,
   "scoreLabel": "<Excellent|Good|Fair|Poor>",
@@ -78,13 +111,7 @@ Provide exactly this JSON structure (respond ONLY with valid JSON, no markdown):
 
 Provide 4-6 insights, 3-5 recommendations, and relevant alerts. Be specific with numbers. Keep language friendly and motivating.`;
 
-    const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1500,
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const responseText = message.content[0].text.trim();
+    const responseText = await callGroq({ prompt, maxTokens: 1500 });
     let insights;
 
     try {
@@ -104,7 +131,7 @@ Provide 4-6 insights, 3-5 recommendations, and relevant alerts. Be specific with
     });
   } catch (err) {
     console.error("AI Insights error:", err);
-    res.status(500).json({ success: false, message: "Failed to generate AI insights. Please check your ANTHROPIC_API_KEY." });
+    res.status(500).json({ success: false, message: err.message || "Failed to generate AI insights. Please check your GROQ_API_KEY." });
   }
 };
 
@@ -126,14 +153,13 @@ export const askAIQuestion = async (req, res) => {
 
     const context = `User's this month data: Income ₹${totalIncome}, Expenses ₹${totalExpense}, Savings ₹${totalIncome - totalExpense}. Top expenses: ${JSON.stringify(expenses.slice(0, 5).map(e => ({ category: e.category, amount: e.amount })))}`;
 
-    const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 500,
+    const answer = await callGroq({
       system: `You are FinTrackAI, a helpful personal finance advisor. Be concise, friendly, and give actionable advice. Context: ${context}`,
-      messages: [{ role: "user", content: question }],
+      prompt: question,
+      maxTokens: 500,
     });
 
-    res.json({ success: true, data: { answer: message.content[0].text, question } });
+    res.json({ success: true, data: { answer, question } });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
