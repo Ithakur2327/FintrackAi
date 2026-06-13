@@ -39,8 +39,8 @@
   .dark .grid-bg {
     /* Reduced opacity for dark theme — grid should NOT bleed through cards */
     background-image:
-      linear-gradient(rgba(255,255,255,0.009) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.009) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 
@@ -221,7 +221,6 @@
   }
   .sidebar-link-active {
     @apply bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
   .sidebar-link-inactive {
     @apply text-neutral-500 dark:text-neutral-400 hover:bg-white/60 dark:hover:bg-neutral-800/60 hover:text-neutral-800 dark:hover:text-neutral-200;

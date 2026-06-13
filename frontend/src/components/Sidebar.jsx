@@ -170,7 +170,7 @@ const SidebarContent = ({ mobile = false, onClose }) => {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto no-visible-scrollbar">
         {MENU_ITEMS.map((item) => (
           <SidebarLink key={item.path} item={item} mobile={mobile} onClose={onClose} />
         ))}

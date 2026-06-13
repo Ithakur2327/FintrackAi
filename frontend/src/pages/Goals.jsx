@@ -190,11 +190,7 @@ function GoalCard({ goal, onEdit, onDelete, onAddAmount }) {
       <GlowingEffect spread={30} glow={false} disabled={false} proximity={60}
         variant={isDark ? "white" : "dark"} borderWidth={1} />
 
-      {/* Color accent top bar */}
-      <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl"
-        style={{ background: goal.color || "#0d9488" }} />
-
-      <div className="pt-2">
+      <div>
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3 min-w-0">
@@ -323,8 +319,8 @@ export default function Goals() {
           const SI = s.Icon;
           return (
             <div key={s.label} className="card-big relative overflow-hidden">
-              <GlowingEffect spread={25} glow={false} disabled={false} proximity={60}
-                variant={isDark ? "white" : "dark"} borderWidth={1} />
+              <GlowingEffect spread={28} glow={false} disabled={false} proximity={72}
+                variant={isDark ? "white" : "dark"} borderWidth={1.5} />
               <div className="flex items-start justify-between mb-3">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center border bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700">
                   <SI size={16} className="text-neutral-500 dark:text-neutral-400" />

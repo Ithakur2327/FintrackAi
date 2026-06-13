@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { User, Mail, Shield, Bell, Globe, Save, CheckCircle, AlertCircle } from "lucide-react";
+import { User, Mail, Shield, Bell, Globe, Save, CheckCircle, AlertCircle, Trash2, AlertTriangle, X } from "lucide-react";
 import { useAuth } from "../App.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
@@ -17,7 +17,7 @@ function Toast({ message, type }) {
 }
 
 export default function Profile() {
-  const { user, persistAuth } = useAuth();
+  const { user, persistAuth, logout } = useAuth();
   const [profileForm, setProfileForm] = useState({
     name: user?.name || "",
     currency: user?.currency || "INR",
@@ -72,8 +72,22 @@ export default function Profile() {
     }
   };
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true);
+    try {
+      await axios.delete(`${API_BASE}/auth/account`);
+      logout();
+    } catch (err) {
+      showToast(err.response?.data?.message || "Failed to delete account", "error");
+      setDeleteLoading(false);
+    }
+  };
+
   return (
-    <div className="space-y-5 max-w-2xl animate-fade-in">
+    <div className="space-y-5 max-w-2xl mx-auto animate-fade-in">
       <Toast {...toast} />
 
       {/* Header */}
@@ -172,18 +186,54 @@ export default function Profile() {
         </form>
       </div>
 
-      {/* App Info */}
-      <div className="card bg-gradient-to-br from-slate-900 to-teal-900 border-0">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-            <Globe size={18} className="text-white" />
+      {/* Danger Zone — Delete Account */}
+      <div className="card-big border-red-200 dark:border-red-500/20">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-8 bg-red-50 dark:bg-red-500/10 rounded-xl flex items-center justify-center">
+            <AlertTriangle size={16} className="text-red-500" />
           </div>
-          <div>
-            <p className="font-bold text-white text-sm">FinTrackAI v1.0</p>
-            <p className="text-white/50 text-xs">Smart Personal Finance Tracker · Built with Claude AI</p>
+          <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Danger Zone</h2>
+        </div>
+        <p className="text-sm text-neutral-500 mb-4">
+          Permanently delete your account and all associated data. This action cannot be undone.
+        </p>
+        <button onClick={() => setShowDeleteConfirm(true)} className="btn-danger flex items-center gap-2">
+          <Trash2 size={15} /> Delete Account
+        </button>
+      </div>
+
+      {/* Delete confirmation modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={e => e.target === e.currentTarget && !deleteLoading && setShowDeleteConfirm(false)}>
+          <div className="bg-white dark:bg-[#161616] border border-neutral-200 dark:border-neutral-800 rounded-2xl w-full max-w-sm shadow-2xl">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">
+              <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">Delete Account</h2>
+              <button onClick={() => setShowDeleteConfirm(false)} disabled={deleteLoading}
+                className="w-8 h-8 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors">
+                <X size={16} className="text-neutral-500" />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="w-12 h-12 rounded-2xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center mb-4">
+                <AlertTriangle size={22} className="text-red-500" />
+              </div>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">
+                Are you sure you want to delete your account? All your data — income, expenses, budgets, and goals — will be permanently removed.
+              </p>
+              <div className="flex gap-3 mt-6">
+                <button onClick={() => setShowDeleteConfirm(false)} disabled={deleteLoading} className="btn-secondary flex-1">
+                  Cancel
+                </button>
+                <button onClick={handleDeleteAccount} disabled={deleteLoading} className="btn-danger flex-1 flex items-center justify-center gap-2">
+                  {deleteLoading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Trash2 size={15} />}
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
