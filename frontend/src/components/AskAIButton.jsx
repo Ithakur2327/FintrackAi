@@ -49,37 +49,39 @@ export function AskAIButton({
     : "0 2px 0 rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.8)";
 
   return (
-    <Tag
-      onClick={onClick}
-      disabled={Tag === "button" ? disabled : undefined}
-      className={cn(
-        "ask-ai-btn",
-        "hover:scale-[1.02]",
-        className
-      )}
-      style={{ background: outerBg, boxShadow: shadow }}
-    >
-      {/* Inner content */}
-      <div
-        className={cn("ask-ai-btn-inner", textCls)}
-        style={{ background: innerBg }}
+    <div className="rounded-2xl" style={{ boxShadow: shadow }}>
+      <Tag
+        onClick={onClick}
+        disabled={Tag === "button" ? disabled : undefined}
+        className={cn(
+          "ask-ai-btn",
+          "hover:scale-[1.02]",
+          className
+        )}
+        style={{ background: outerBg }}
       >
-        {children}
-      </div>
+        {/* Rotating moving border */}
+        <motion.div
+          className="absolute inset-0 z-0 rounded-2xl"
+          style={{ filter: "blur(4px)", width: "100%", height: "100%" }}
+          animate={{ background: arcs[direction] }}
+          transition={{ ease: "linear", duration }}
+        />
 
-      {/* Rotating moving border */}
-      <motion.div
-        className="absolute inset-0 z-0 rounded-2xl"
-        style={{ filter: "blur(2.5px)", width: "100%", height: "100%" }}
-        animate={{ background: arcs[direction] }}
-        transition={{ ease: "linear", duration }}
-      />
+        {/* Mask inner area to only show border */}
+        <div
+          className="absolute inset-[1.5px] z-[1] rounded-[14px]"
+          style={{ background: innerBg }}
+        />
 
-      {/* Mask inner area to only show border */}
-      <div
-        className="absolute inset-[2px] z-[1] rounded-[14px]"
-        style={{ background: innerBg }}
-      />
-    </Tag>
+        {/* Inner content */}
+        <div
+          className={cn("ask-ai-btn-inner", textCls)}
+          style={{ background: innerBg }}
+        >
+          {children}
+        </div>
+      </Tag>
+    </div>
   );
 }

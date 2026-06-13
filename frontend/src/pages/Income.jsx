@@ -140,7 +140,7 @@ export default function Income() {
             ₹{(meta.totalAmount || 0).toLocaleString("en-IN")} · {meta.total || 0} records
           </p>
         </div>
-        <button onClick={() => setShowAdd(true)} className="btn-green shrink-0">
+        <button onClick={() => setShowAdd(true)} className="btn-primary shrink-0">
           <Plus size={15} /> Add Income
         </button>
       </div>
@@ -249,7 +249,7 @@ export default function Income() {
               <TrendingUp size={32} className="mx-auto text-neutral-300 dark:text-neutral-700 mb-3" />
               <p className="text-neutral-500 font-medium mb-1 text-sm">No income records found</p>
               <p className="text-xs text-neutral-400 mb-4">Add your salary, freelance, or other income</p>
-              <button onClick={() => setShowAdd(true)} className="btn-green text-sm">Add Income</button>
+              <button onClick={() => setShowAdd(true)} className="btn-primary text-sm">Add Income</button>
             </div>
           )}
         </div>

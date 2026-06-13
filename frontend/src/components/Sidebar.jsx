@@ -100,10 +100,11 @@ const SidebarLink = ({ item, mobile = false, onClose }) => {
       <div className={`flex items-center justify-center shrink-0 ${!showLabel && !mobile ? "w-full" : ""}`}>
         <Icon
           size={17}
+          strokeWidth={2.25}
           className={`shrink-0 transition-colors ${
             isActive
               ? "text-neutral-900 dark:text-white"
-              : "text-neutral-400 dark:text-neutral-500"
+              : "text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100"
           }`}
         />
       </div>
@@ -143,7 +144,7 @@ const MENU_ITEMS = [
   { label: "Expenses",    path: "/expense",     icon: TrendingDown },
   { label: "Budget",      path: "/budget",      icon: Wallet },
   { label: "Goals",       path: "/goals",       icon: Target },
-  { label: "AI Insights", path: "/ai-insights", icon: BrainCircuit, badge: "AI" },
+  { label: "AI Insights", path: "/ai-insights", icon: BrainCircuit },
   { label: "Profile",     path: "/profile",     icon: User },
 ];
 
@@ -180,12 +181,12 @@ const SidebarContent = ({ mobile = false, onClose }) => {
       <div className="border-t border-neutral-200/80 dark:border-neutral-800/80 pt-3 mt-1 space-y-0.5">
         <button
           onClick={() => setIsDark(p => !p)}
-          className={`sidebar-link sidebar-link-inactive w-full ${!showLabels && !mobile ? "justify-center px-0" : ""}`}
+          className={`sidebar-link sidebar-link-inactive group w-full ${!showLabels && !mobile ? "justify-center px-0" : ""}`}
         >
           <div className={`flex items-center justify-center shrink-0 ${!showLabels && !mobile ? "w-full" : ""}`}>
             {isDark
-              ? <Sun size={16} className="shrink-0 text-neutral-400 dark:text-neutral-500" />
-              : <Moon size={16} className="shrink-0 text-neutral-400 dark:text-neutral-500" />
+              ? <Sun size={16} strokeWidth={2.25} className="shrink-0 text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100" />
+              : <Moon size={16} strokeWidth={2.25} className="shrink-0 text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-neutral-100" />
             }
           </div>
           <motion.span
@@ -198,10 +199,10 @@ const SidebarContent = ({ mobile = false, onClose }) => {
 
         <button
           onClick={logout}
-          className={`sidebar-link w-full text-neutral-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-150 ${!showLabels && !mobile ? "justify-center px-0" : ""}`}
+          className={`sidebar-link group w-full text-neutral-500 dark:text-neutral-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-150 ${!showLabels && !mobile ? "justify-center px-0" : ""}`}
         >
           <div className={`flex items-center justify-center shrink-0 ${!showLabels && !mobile ? "w-full" : ""}`}>
-            <LogOut size={16} className="shrink-0" />
+            <LogOut size={16} strokeWidth={2.25} className="shrink-0" />
           </div>
           <motion.span
             animate={{ display: animate ? (showLabels ? "inline-block" : "none") : "inline-block", opacity: animate ? (showLabels ? 1 : 0) : 1 }}

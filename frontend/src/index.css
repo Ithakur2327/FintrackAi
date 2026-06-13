@@ -138,6 +138,31 @@
     @apply bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200;
   }
 
+  /* ── Icon button — 3D press style, matches btn-primary/secondary ── */
+  .btn-icon {
+    @apply w-9 h-9 rounded-xl flex items-center justify-center
+      bg-white dark:bg-neutral-900 text-neutral-500 dark:text-neutral-400
+      border border-neutral-200 dark:border-neutral-700
+      transition-all duration-150 active:scale-[0.97]
+      disabled:opacity-50 disabled:cursor-not-allowed;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .btn-icon:hover:not(:disabled) {
+    @apply bg-neutral-50 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .btn-icon:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  }
+  .dark .btn-icon {
+    box-shadow: 0 2px 0 rgba(255,255,255,0.12), 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .dark .btn-icon:hover:not(:disabled) {
+    box-shadow: 0 3px 0 rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.3);
+  }
+
   .btn-danger {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-red-500 text-white border border-red-600
@@ -223,7 +248,7 @@
     @apply bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white;
   }
   .sidebar-link-inactive {
-    @apply text-neutral-500 dark:text-neutral-400 hover:bg-white/60 dark:hover:bg-neutral-800/60 hover:text-neutral-800 dark:hover:text-neutral-200;
+    @apply text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 hover:shadow-sm;
   }
 
   /* ── AI Insights moving border — works in both themes ── */

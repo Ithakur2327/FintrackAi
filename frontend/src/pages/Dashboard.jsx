@@ -144,12 +144,9 @@ export default function Dashboard() {
           <button
             onClick={fetchDashboard}
             disabled={loading}
-            className="w-9 h-9 rounded-xl border border-neutral-200 dark:border-neutral-800
-              bg-white dark:bg-neutral-900 flex items-center justify-center
-              hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors disabled:opacity-50"
-            style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.06)" }}
+            className="btn-icon"
           >
-            <RefreshCw size={13} className={`text-neutral-500 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw size={13} className={`${loading ? "animate-spin" : ""}`} />
           </button>
 
           <button onClick={() => setShowAdd(true)} className="btn-primary">
