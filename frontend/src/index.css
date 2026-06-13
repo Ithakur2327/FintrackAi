@@ -33,15 +33,16 @@
   }
   .dark .grid-bg {
     background-image:
-      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
     background-size: 16px 16px;
   }
 
   /* ── Card ── */
   .card {
-    @apply bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 transition-all duration-200;
+    @apply relative bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 transition-all duration-300;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    isolation: isolate;
   }
   .card-hover {
     @apply card cursor-pointer;
@@ -50,6 +51,48 @@
     @apply border-neutral-300 dark:border-neutral-700;
     box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
     transform: translateY(-1px);
+  }
+
+  /* ── 3D moving-border glow on cards ── */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--angle, 0deg),
+      transparent 0deg,
+      rgba(99,102,241,0.55) 60deg,
+      transparent 140deg,
+      transparent 220deg,
+      rgba(16,185,129,0.45) 290deg,
+      transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: border-spin 6s linear infinite;
+    pointer-events: none;
+  }
+  .card:hover {
+    transform: translateY(-3px) perspective(800px) rotateX(1deg);
+    box-shadow: 0 14px 32px -12px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .dark .card:hover {
+    box-shadow: 0 14px 32px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .card:hover::before {
+    opacity: 1;
+  }
+  @property --angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @keyframes border-spin {
+    to { --angle: 360deg; }
   }
 
   /* ── Buttons ── */
@@ -108,6 +151,16 @@
     @apply w-9 h-9 rounded-xl flex items-center justify-center shrink-0
       bg-neutral-100 dark:bg-neutral-800
       border border-neutral-200 dark:border-neutral-700;
+  }
+  .icon-box-accent {
+    @apply w-9 h-9 rounded-xl flex items-center justify-center shrink-0
+      bg-indigo-50 dark:bg-indigo-500/10
+      border border-indigo-100 dark:border-indigo-500/20;
+  }
+  .icon-box-emerald {
+    @apply w-9 h-9 rounded-xl flex items-center justify-center shrink-0
+      bg-emerald-50 dark:bg-emerald-500/10
+      border border-emerald-100 dark:border-emerald-500/20;
   }
 
   /* ── Input ── */

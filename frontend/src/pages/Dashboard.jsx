@@ -7,13 +7,14 @@ import {
 } from "recharts";
 import {
   TrendingUp, TrendingDown, Wallet, BarChart2,
-  Plus, RefreshCw, BrainCircuit, Activity
+  Plus, RefreshCw, Activity
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth, useTheme } from "../App.jsx";
 import StatsCard from "../components/StatsCard.jsx";
 import TransactionItem from "../components/TransactionItem.jsx";
 import AddTransaction from "../components/AddTransaction.jsx";
+import { AskAIButton } from "../components/AskAIButton.jsx";
 // ── MOCK: delete this import + MOCK_MODE checks when backend is ready ──
 import { MOCK_MODE, mockDashboard } from "../mock/data.js";
 
@@ -120,17 +121,9 @@ export default function Dashboard() {
 
         <div className="flex items-center gap-2 shrink-0">
           <Link to="/ai-insights">
-            <motion.div
-              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl
-                bg-indigo-600 text-white border border-indigo-700
-                cursor-pointer transition-colors"
-              style={{ boxShadow: "0 1px 4px rgba(99,102,241,0.4)" }}
-            >
-              <BrainCircuit size={13} />
-              <span className="hidden xs:inline">AI Insights</span>
-              <span className="xs:hidden">AI</span>
-            </motion.div>
+            <AskAIButton as="div" duration={1.6} className="text-xs sm:text-sm">
+              Ask AI
+            </AskAIButton>
           </Link>
 
           <button

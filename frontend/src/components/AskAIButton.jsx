@@ -17,7 +17,7 @@ const next = (dir, cw) => {
 };
 
 /** Dark pill button with rotating white glow border — exact "Ask AI" style */
-export function AskAIButton({ children, onClick, className, duration = 1.4, clockwise = true, disabled }) {
+export function AskAIButton({ children, onClick, className, duration = 1.4, clockwise = true, disabled, as: Tag = "button" }) {
   const [hovered, setHovered]     = useState(false);
   const [direction, setDirection] = useState("TOP");
 
@@ -28,9 +28,9 @@ export function AskAIButton({ children, onClick, className, duration = 1.4, cloc
   }, [hovered, duration, clockwise]);
 
   return (
-    <button
+    <Tag
       onClick={onClick}
-      disabled={disabled}
+      disabled={Tag === "button" ? disabled : undefined}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={cn(
@@ -56,6 +56,6 @@ export function AskAIButton({ children, onClick, className, duration = 1.4, cloc
 
       {/* inner bg to mask the blur outside pill */}
       <div className="absolute inset-[2px] z-[1] rounded-full bg-[#0f0f0f]" />
-    </button>
+    </Tag>
   );
 }
