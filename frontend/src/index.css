@@ -29,13 +29,13 @@
     background-image:
       linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-size: 16px 16px;
   }
   .dark .grid-bg {
     background-image:
       linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-size: 16px 16px;
   }
 
   /* ── Card ── */
@@ -88,6 +88,19 @@
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-red-500 text-white border border-red-600
       transition-all duration-150 active:scale-[0.97];
+  }
+
+  .btn-green {
+    @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
+      bg-emerald-500 text-white border border-emerald-600
+      transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed;
+    box-shadow: 0 1px 0 0 rgba(255,255,255,0.15) inset, 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .btn-green:hover:not(:disabled) { @apply bg-emerald-600; }
+
+  /* ── Section label ── */
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500;
   }
 
   /* ── Icon box ── */
