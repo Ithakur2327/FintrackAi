@@ -176,8 +176,8 @@ const SidebarContent = ({ mobile = false, onClose }) => {
         ))}
       </nav>
 
-      {/* Bottom — no partition line above */}
-      <div className="space-y-0.5 pt-2">
+      {/* Bottom — partition divider + theme toggle + logout */}
+      <div className="border-t border-neutral-200/80 dark:border-neutral-800/80 pt-3 mt-1 space-y-0.5">
         <button
           onClick={() => setIsDark(p => !p)}
           className={`sidebar-link sidebar-link-inactive w-full ${!showLabels && !mobile ? "justify-center px-0" : ""}`}

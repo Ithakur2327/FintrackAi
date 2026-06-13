@@ -9,12 +9,17 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      'Inter', 'Helvetica Neue', Arial, sans-serif;
-    @apply bg-[#f5f5f7] text-neutral-900 dark:bg-[#0a0a0a] dark:text-neutral-100 transition-colors duration-300;
+    /* Apple SF Pro font stack — numbers & words both */
+    font-family:
+      'SF Pro Display', 'SF Pro Text',
+      -apple-system, BlinkMacSystemFont,
+      'Helvetica Neue', Arial, sans-serif;
+    @apply bg-[#f5f5f7] text-neutral-900 dark:bg-[#0a0a0a] dark:text-neutral-100;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   ::-webkit-scrollbar { width: 3px; height: 3px; }
@@ -27,53 +32,73 @@
   /* ── Grid background ── */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px);
-    background-size: 16px 16px;
+      linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
   .dark .grid-bg {
+    /* Reduced opacity for dark theme — grid should NOT bleed through cards */
     background-image:
-      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-    background-size: 16px 16px;
+      linear-gradient(rgba(255,255,255,0.009) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.009) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 
-  /* ── Card ── */
+  /* ── Card — fully opaque in both themes ── */
   .card {
-    @apply relative bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 transition-all duration-300;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    @apply relative bg-white dark:bg-[#161616] rounded-2xl
+      border border-neutral-200/80 dark:border-neutral-800/80
+      p-5 transition-all duration-200;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.07),
+      0 1px 2px rgba(0,0,0,0.04);
     isolation: isolate;
+    will-change: transform, box-shadow;
   }
-  .card-hover {
-    @apply card cursor-pointer;
-  }
-  .card-hover:hover {
-    @apply border-neutral-300 dark:border-neutral-700;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  .card:hover {
     transform: translateY(-1px);
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.09),
+      0 2px 6px rgba(0,0,0,0.05);
+    @apply border-neutral-300 dark:border-neutral-700/80;
   }
 
-  /* ── Stats card: small cards get glowing border effect only ── */
-  /* ── Big cards: 3D hover effect only (no moving border) ── */
+  /* ── Big cards — subtle 3D shadow only, no perspective distortion ── */
   .card-big {
-    @apply relative bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 p-5 transition-all duration-300;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    @apply relative bg-white dark:bg-[#161616] rounded-2xl
+      border border-neutral-200/80 dark:border-neutral-800/80
+      p-5 transition-all duration-200;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.07),
+      0 1px 2px rgba(0,0,0,0.04);
     isolation: isolate;
+    will-change: transform, box-shadow;
   }
   .card-big:hover {
-    transform: translateY(-3px) perspective(800px) rotateX(1deg);
-    box-shadow: 0 14px 32px -12px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.06);
-    @apply border-neutral-300 dark:border-neutral-700;
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.10),
+      0 3px 8px rgba(0,0,0,0.06),
+      0 1px 3px rgba(0,0,0,0.04);
+    @apply border-neutral-300/80 dark:border-neutral-700/80;
   }
   .dark .card-big:hover {
-    box-shadow: 0 14px 32px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    box-shadow:
+      0 8px 28px rgba(0,0,0,0.5),
+      0 3px 8px rgba(0,0,0,0.3),
+      0 0 0 0.5px rgba(255,255,255,0.04);
   }
 
-  /* Remove 3D effect and moving border from .card (used by big content cards) */
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.04);
-    @apply border-neutral-300 dark:border-neutral-700;
+  /* ── Ask AI Button — square + curved corners, theme-aware ── */
+  .ask-ai-btn {
+    @apply relative inline-flex items-center justify-center gap-2
+      overflow-hidden rounded-2xl p-px
+      transition-all duration-200 active:scale-[0.97]
+      disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .ask-ai-btn-inner {
+    @apply relative z-10 flex items-center gap-2
+      rounded-[14px] px-4 py-2 text-sm font-semibold tracking-tight select-none;
   }
 
   /* ── Buttons ── */
@@ -81,12 +106,17 @@
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-neutral-900 text-white dark:bg-white dark:text-black
       border border-neutral-900 dark:border-white
-      transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed;
-    box-shadow: 0 1px 0 0 rgba(255,255,255,0.1) inset, 0 2px 4px rgba(0,0,0,0.2);
+      transition-all duration-150 active:scale-[0.97]
+      disabled:opacity-40 disabled:cursor-not-allowed;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.15);
   }
   .btn-primary:hover:not(:disabled) {
     @apply bg-neutral-800 dark:bg-neutral-100;
-    box-shadow: 0 1px 0 0 rgba(255,255,255,0.1) inset, 0 3px 8px rgba(0,0,0,0.18);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
+  }
+  .dark .btn-primary {
+    box-shadow: 0 2px 0 rgba(255,255,255,0.2), 0 1px 3px rgba(0,0,0,0.3);
   }
 
   .btn-secondary {
@@ -112,15 +142,20 @@
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-red-500 text-white border border-red-600
       transition-all duration-150 active:scale-[0.97];
+    box-shadow: 0 2px 0 rgba(185,28,28,0.4);
   }
 
   .btn-green {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-emerald-500 text-white border border-emerald-600
-      transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed;
-    box-shadow: 0 1px 0 0 rgba(255,255,255,0.15) inset, 0 2px 4px rgba(0,0,0,0.15);
+      transition-all duration-150 active:scale-[0.97]
+      disabled:opacity-40 disabled:cursor-not-allowed;
+    box-shadow: 0 2px 0 rgba(4,120,87,0.4), 0 1px 3px rgba(0,0,0,0.1);
   }
-  .btn-green:hover:not(:disabled) { @apply bg-emerald-600; }
+  .btn-green:hover:not(:disabled) {
+    @apply bg-emerald-600;
+    transform: translateY(-1px);
+  }
 
   /* ── Section label ── */
   .section-label {
@@ -149,8 +184,8 @@
     @apply w-full border border-neutral-200 dark:border-neutral-700 rounded-xl px-3.5 py-2.5
       text-sm text-neutral-900 dark:text-neutral-100
       placeholder-neutral-400 dark:placeholder-neutral-600
-      bg-white dark:bg-neutral-900
-      focus:outline-none focus:ring-2 focus:ring-neutral-900/20 dark:focus:ring-white/20
+      bg-white dark:bg-[#1a1a1a]
+      focus:outline-none focus:ring-2 focus:ring-neutral-900/15 dark:focus:ring-white/15
       focus:border-neutral-400 dark:focus:border-neutral-500
       transition-all duration-150;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04) inset;
@@ -172,12 +207,12 @@
   .shimmer {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
-    animation: shimmer 1.6s infinite;
+    animation: shimmer 1.5s infinite;
   }
   .dark .shimmer {
-    background: linear-gradient(90deg, #1c1c1e 25%, #2a2a2d 50%, #1c1c1e 75%);
+    background: linear-gradient(90deg, #1c1c1e 25%, #242426 50%, #1c1c1e 75%);
     background-size: 200% 100%;
-    animation: shimmer 1.6s infinite;
+    animation: shimmer 1.5s infinite;
   }
 
   /* ── Sidebar ── */
@@ -205,10 +240,10 @@
     padding: 1px;
     background: conic-gradient(from var(--ai-angle, 0deg),
       transparent 0deg,
-      rgba(99,102,241,0.7) 60deg,
+      rgba(79,70,229,0.9) 60deg,
       transparent 140deg,
       transparent 220deg,
-      rgba(16,185,129,0.6) 290deg,
+      rgba(5,150,105,0.8) 290deg,
       transparent 360deg);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
@@ -224,16 +259,6 @@
   @keyframes ai-border-spin {
     to { --ai-angle: 360deg; }
   }
-  /* Light theme: make it visible with darker colors */
-  .ai-border-card::before {
-    background: conic-gradient(from var(--ai-angle, 0deg),
-      transparent 0deg,
-      rgba(79,70,229,0.8) 60deg,
-      transparent 140deg,
-      transparent 220deg,
-      rgba(5,150,105,0.7) 290deg,
-      transparent 360deg);
-  }
 }
 
 @keyframes shimmer {
@@ -242,12 +267,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s ease both;
+  animation: fadeIn 0.35s cubic-bezier(0.4,0,0.2,1) both;
 }
 
 .no-visible-scrollbar {

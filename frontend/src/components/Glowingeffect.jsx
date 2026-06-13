@@ -82,20 +82,31 @@ const GlowingEffect = memo(
 
     const getGradient = () => {
       if (variant === "white") {
-        return `repeating-conic-gradient(from 236.84deg at 50% 50%, #000000, #000000 calc(25% / var(--repeating-conic-gradient-times)))`;
+        // WHITE moving light — for use on DARK theme cards (dark background)
+        return `radial-gradient(circle, rgba(255,255,255,0.95) 10%, transparent 20%),
+          radial-gradient(circle at 40% 40%, rgba(255,255,255,0.7) 5%, transparent 15%),
+          radial-gradient(circle at 60% 60%, rgba(255,255,255,0.8) 10%, transparent 20%),
+          radial-gradient(circle at 40% 60%, rgba(255,255,255,0.6) 10%, transparent 20%),
+          repeating-conic-gradient(from 236.84deg at 50% 50%,
+            rgba(255,255,255,1) 0%,
+            rgba(255,255,255,0.4) calc(25% / var(--repeating-conic-gradient-times)),
+            rgba(255,255,255,0.85) calc(50% / var(--repeating-conic-gradient-times)),
+            rgba(255,255,255,0.3) calc(75% / var(--repeating-conic-gradient-times)),
+            rgba(255,255,255,1) calc(100% / var(--repeating-conic-gradient-times))
+          )`;
       }
       if (variant === "dark") {
-        // Dark glow for light backgrounds — silver/charcoal tones
-        return `radial-gradient(circle, #555 10%, transparent 20%),
-          radial-gradient(circle at 40% 40%, #333 5%, transparent 15%),
-          radial-gradient(circle at 60% 60%, #444 10%, transparent 20%),
-          radial-gradient(circle at 40% 60%, #222 10%, transparent 20%),
+        // BLACK/DARK moving light — for use on LIGHT theme cards (white background)
+        return `radial-gradient(circle, rgba(0,0,0,0.85) 10%, transparent 20%),
+          radial-gradient(circle at 40% 40%, rgba(0,0,0,0.6) 5%, transparent 15%),
+          radial-gradient(circle at 60% 60%, rgba(0,0,0,0.7) 10%, transparent 20%),
+          radial-gradient(circle at 40% 60%, rgba(0,0,0,0.5) 10%, transparent 20%),
           repeating-conic-gradient(from 236.84deg at 50% 50%,
-            #555 0%,
-            #222 calc(25% / var(--repeating-conic-gradient-times)),
-            #444 calc(50% / var(--repeating-conic-gradient-times)),
-            #111 calc(75% / var(--repeating-conic-gradient-times)),
-            #555 calc(100% / var(--repeating-conic-gradient-times))
+            rgba(0,0,0,0.9) 0%,
+            rgba(0,0,0,0.3) calc(25% / var(--repeating-conic-gradient-times)),
+            rgba(0,0,0,0.7) calc(50% / var(--repeating-conic-gradient-times)),
+            rgba(0,0,0,0.2) calc(75% / var(--repeating-conic-gradient-times)),
+            rgba(0,0,0,0.9) calc(100% / var(--repeating-conic-gradient-times))
           )`;
       }
       // default — colorful
