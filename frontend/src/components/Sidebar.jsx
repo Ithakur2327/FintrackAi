@@ -20,6 +20,7 @@ const SidebarProvider = ({ children, open: openProp, setOpen: setOpenProp, anima
   return <SidebarContext.Provider value={{ open, setOpen, animate }}>{children}</SidebarContext.Provider>;
 };
 
+/* Clean geometric logo — no letter inside */
 const LogoMark = ({ size = 28 }) => (
   <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
     <rect x="1" y="1" width="26" height="26" rx="7" className="fill-neutral-900 dark:fill-white" />
@@ -28,13 +29,16 @@ const LogoMark = ({ size = 28 }) => (
   </svg>
 );
 
+const COLLAPSED_W = "72px";
+const EXPANDED_W  = "220px";
+
 const DesktopSidebar = ({ children }) => {
   const { open, setOpen, animate } = useSidebar();
   return (
     <motion.div
-      className="h-full px-2 py-4 hidden md:flex md:flex-col bg-[#f5f5f7] dark:bg-neutral-950 border-r border-neutral-200 dark:border-neutral-900 shrink-0"
-      animate={{ width: animate ? (open ? "220px" : "56px") : "220px" }}
-      transition={{ duration: 0.25, ease: [0.25, 1, 0.5, 1] }}
+      className="h-full px-2 py-4 hidden md:flex md:flex-col bg-[#f5f5f7] dark:bg-neutral-950 border-r border-neutral-200 dark:border-neutral-900 shrink-0 overflow-hidden"
+      animate={{ width: animate ? (open ? EXPANDED_W : COLLAPSED_W) : EXPANDED_W }}
+      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
       style={{ willChange: "width" }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
@@ -48,11 +52,10 @@ const MobileSidebar = ({ children }) => {
   const { open, setOpen } = useSidebar();
   return (
     <>
-      {/* Top bar */}
       <div className="h-14 px-4 flex md:hidden items-center justify-between bg-[#f5f5f7] dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-900 w-full shrink-0">
         <div className="flex items-center gap-2.5">
           <LogoMark size={26} />
-          <span className="font-bold text-neutral-900 dark:text-white text-sm tracking-tight">Fintrack</span>
+          <span className="font-bold text-neutral-900 dark:text-white text-sm tracking-tight">FinledgerAI</span>
         </div>
         <button
           onClick={() => setOpen(true)}
@@ -62,7 +65,6 @@ const MobileSidebar = ({ children }) => {
         </button>
       </div>
 
-      {/* Backdrop */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -77,7 +79,6 @@ const MobileSidebar = ({ children }) => {
         )}
       </AnimatePresence>
 
-      {/* Drawer */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -85,7 +86,7 @@ const MobileSidebar = ({ children }) => {
             initial={{ x: "-100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "-100%", opacity: 0 }}
-            transition={{ duration: 0.24, ease: "easeInOut" }}
+            transition={{ duration: 0.26, ease: [0.32, 0.72, 0, 1] }}
             className="fixed top-0 left-0 h-full w-72 max-w-[85vw] bg-[#f5f5f7] dark:bg-neutral-950 p-4 z-[100] flex flex-col border-r border-neutral-200 dark:border-neutral-900 shadow-2xl"
           >
             <button
@@ -127,13 +128,13 @@ const SidebarLink = ({ item, mobile = false, onClose }) => {
         />
       </div>
 
-      <span
-        className={`text-sm font-medium whitespace-pre tracking-tight flex-1 text-neutral-700 dark:text-neutral-300 transition-opacity duration-150 ${
-          showLabel ? "opacity-100" : "opacity-0 hidden"
-        }`}
+      <motion.span
+        animate={{ opacity: showLabel ? 1 : 0 }}
+        transition={{ duration: 0.18 }}
+        className={`text-sm font-medium whitespace-pre tracking-tight flex-1 text-neutral-700 dark:text-neutral-300 ${!showLabel && !mobile ? "hidden" : ""}`}
       >
         {item.label}
-      </span>
+      </motion.span>
 
       {item.badge && showLabel && (
         <span className="text-[10px] font-bold bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 px-1.5 py-0.5 rounded-md">
@@ -171,9 +172,13 @@ const SidebarContent = ({ mobile = false, onClose }) => {
       {/* Logo */}
       <div className={`flex items-center gap-2.5 px-2 py-3 mb-2 ${!showLabels && !mobile ? "justify-center" : ""}`}>
         <LogoMark size={26} />
-        <div className={`transition-opacity duration-150 ${showLabels ? "opacity-100" : "opacity-0 hidden"}`}>
-          <p className="font-bold text-neutral-900 dark:text-white text-sm tracking-tight">Fintrack</p>
-        </div>
+        <motion.div
+          animate={{ opacity: showLabels ? 1 : 0 }}
+          transition={{ duration: 0.18 }}
+          className={!showLabels && !mobile ? "hidden" : ""}
+        >
+          <p className="font-bold text-neutral-900 dark:text-white text-sm tracking-tight">FinledgerAI</p>
+        </motion.div>
       </div>
 
       {/* Nav */}
@@ -195,9 +200,13 @@ const SidebarContent = ({ mobile = false, onClose }) => {
               : <Moon size={16} strokeWidth={2.25} className="shrink-0 text-neutral-600 dark:text-neutral-400 group-hover:text-black dark:group-hover:text-white" />
             }
           </div>
-          <span className={`text-sm font-medium whitespace-pre text-neutral-600 dark:text-neutral-400 transition-opacity duration-150 ${showLabels ? "opacity-100" : "opacity-0 hidden"}`}>
+          <motion.span
+            animate={{ opacity: showLabels ? 1 : 0 }}
+            transition={{ duration: 0.18 }}
+            className={`text-sm font-medium whitespace-pre text-neutral-600 dark:text-neutral-400 ${!showLabels && !mobile ? "hidden" : ""}`}
+          >
             {isDark ? "Light mode" : "Dark mode"}
-          </span>
+          </motion.span>
         </button>
 
         <button
@@ -207,9 +216,13 @@ const SidebarContent = ({ mobile = false, onClose }) => {
           <div className={`flex items-center justify-center shrink-0 ${!showLabels && !mobile ? "w-full" : ""}`}>
             <LogOut size={16} strokeWidth={2.25} className="shrink-0" />
           </div>
-          <span className={`text-sm font-medium whitespace-pre transition-opacity duration-150 ${showLabels ? "opacity-100" : "opacity-0 hidden"}`}>
+          <motion.span
+            animate={{ opacity: showLabels ? 1 : 0 }}
+            transition={{ duration: 0.18 }}
+            className={`text-sm font-medium whitespace-pre ${!showLabels && !mobile ? "hidden" : ""}`}
+          >
             Sign out
-          </span>
+          </motion.span>
         </button>
       </div>
     </div>

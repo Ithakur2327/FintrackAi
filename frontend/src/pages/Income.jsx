@@ -172,13 +172,15 @@ export default function Income() {
             ))}
           </div>
           <div className="relative flex-1 min-w-32">
-            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-            <input type="text" placeholder="Search..." className="input pl-8 text-sm h-9"
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
+            <input type="text" placeholder="Search…" className="input pl-8 text-sm h-9"
               value={search} onChange={e => setSearch(e.target.value)} />
           </div>
-          <select className="input h-9 text-sm w-auto" value={category} onChange={e => setCategory(e.target.value)}>
-            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <div className="select-wrapper">
+            <select className="input h-9 text-sm w-auto min-w-[110px]" value={category} onChange={e => setCategory(e.target.value)}>
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
           <button onClick={fetchIncomes}
             className="w-9 h-9 rounded-xl border border-neutral-200 dark:border-neutral-700 flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 shrink-0">
             <RefreshCw size={13} className={`text-neutral-500 ${loading ? "animate-spin" : ""}`} />

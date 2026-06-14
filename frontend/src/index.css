@@ -13,10 +13,9 @@
   }
 
   body {
-    /* Apple SF Pro font stack — numbers & words both */
     font-family:
-      'SF Pro Display', 'SF Pro Text',
       -apple-system, BlinkMacSystemFont,
+      'SF Pro Display', 'SF Pro Text',
       'Helvetica Neue', Arial, sans-serif;
     @apply bg-[#f5f5f7] text-neutral-900 dark:bg-[#0a0a0a] dark:text-neutral-100;
     transition: background-color 0.25s ease, color 0.25s ease;
@@ -37,14 +36,13 @@
     background-size: 20px 20px;
   }
   .dark .grid-bg {
-    /* Reduced opacity for dark theme — grid should NOT bleed through cards */
     background-image:
       linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 
-  /* ── Card — fully opaque in both themes ── */
+  /* ── Card ── */
   .card {
     @apply relative bg-white dark:bg-[#161616] rounded-2xl
       border border-neutral-200/80 dark:border-neutral-800/80
@@ -63,7 +61,7 @@
     @apply border-neutral-300 dark:border-neutral-700/80;
   }
 
-  /* ── Big cards — subtle 3D shadow only, no perspective distortion ── */
+  /* ── Big cards ── */
   .card-big {
     @apply relative bg-white dark:bg-[#161616] rounded-2xl
       border border-neutral-200/80 dark:border-neutral-800/80
@@ -75,21 +73,19 @@
     will-change: transform, box-shadow;
   }
   .card-big:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow:
-      0 8px 24px rgba(0,0,0,0.10),
-      0 3px 8px rgba(0,0,0,0.06),
-      0 1px 3px rgba(0,0,0,0.04);
+      0 6px 20px rgba(0,0,0,0.09),
+      0 2px 8px rgba(0,0,0,0.05);
     @apply border-neutral-300/80 dark:border-neutral-700/80;
   }
   .dark .card-big:hover {
     box-shadow:
-      0 8px 28px rgba(0,0,0,0.5),
-      0 3px 8px rgba(0,0,0,0.3),
-      0 0 0 0.5px rgba(255,255,255,0.04);
+      0 6px 24px rgba(0,0,0,0.45),
+      0 2px 8px rgba(0,0,0,0.25);
   }
 
-  /* ── Ask AI Button — square + curved corners, theme-aware ── */
+  /* ── Ask AI Button ── */
   .ask-ai-btn {
     @apply relative inline-flex items-center justify-center gap-2
       overflow-hidden rounded-2xl p-px
@@ -101,85 +97,87 @@
       rounded-[14px] px-4 py-2 text-sm font-semibold tracking-tight select-none;
   }
 
-  /* ── Buttons ── */
+  /* ── Buttons — subtle 3D, not gimmicky ── */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-neutral-900 text-white dark:bg-white dark:text-black
       border border-neutral-900 dark:border-white
-      transition-all duration-150 active:scale-[0.97]
+      transition-all duration-150 active:scale-[0.98]
       disabled:opacity-40 disabled:cursor-not-allowed;
-    box-shadow: 0 2px 0 rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.1);
   }
   .btn-primary:hover:not(:disabled) {
     @apply bg-neutral-800 dark:bg-neutral-100;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.12);
-    transform: translateY(-1px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.08);
+    transform: translateY(-0.5px);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(0.5px);
+    box-shadow: 0 0px 0 rgba(0,0,0,0.2);
   }
   .dark .btn-primary {
-    box-shadow: 0 2px 0 rgba(255,255,255,0.2), 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.25);
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300
       border border-neutral-200 dark:border-neutral-700
-      transition-all duration-150 active:scale-[0.97];
-    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      transition-all duration-150 active:scale-[0.98];
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
   .btn-secondary:hover {
     @apply bg-neutral-50 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600;
+    transform: translateY(-0.5px);
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-1.5 font-medium text-sm px-3 py-2 rounded-xl
-      text-neutral-500 dark:text-neutral-400 transition-all duration-150 active:scale-[0.97];
+      text-neutral-500 dark:text-neutral-400 transition-all duration-150 active:scale-[0.98];
   }
   .btn-ghost:hover {
     @apply bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200;
   }
 
-  /* ── Icon button — 3D press style, matches btn-primary/secondary ── */
+  /* ── Icon button — subtle 3D ── */
   .btn-icon {
     @apply w-9 h-9 rounded-xl flex items-center justify-center
       bg-white dark:bg-neutral-900 text-neutral-500 dark:text-neutral-400
       border border-neutral-200 dark:border-neutral-700
       transition-all duration-150 active:scale-[0.97]
       disabled:opacity-50 disabled:cursor-not-allowed;
-    box-shadow: 0 2px 0 rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   }
   .btn-icon:hover:not(:disabled) {
     @apply bg-neutral-50 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 0 rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.1);
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.07);
   }
   .btn-icon:active:not(:disabled) {
-    transform: translateY(1px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+    transform: translateY(0.5px);
+    box-shadow: none;
   }
   .dark .btn-icon {
-    box-shadow: 0 2px 0 rgba(255,255,255,0.12), 0 1px 3px rgba(0,0,0,0.3);
-  }
-  .dark .btn-icon:hover:not(:disabled) {
-    box-shadow: 0 3px 0 rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.25);
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-red-500 text-white border border-red-600
-      transition-all duration-150 active:scale-[0.97];
-    box-shadow: 0 2px 0 rgba(185,28,28,0.4);
+      transition-all duration-150 active:scale-[0.98];
+    box-shadow: 0 1px 0 rgba(185,28,28,0.35);
   }
 
   .btn-green {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-emerald-500 text-white border border-emerald-600
-      transition-all duration-150 active:scale-[0.97]
+      transition-all duration-150 active:scale-[0.98]
       disabled:opacity-40 disabled:cursor-not-allowed;
-    box-shadow: 0 2px 0 rgba(4,120,87,0.4), 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 0 rgba(4,120,87,0.35), 0 1px 2px rgba(0,0,0,0.08);
   }
   .btn-green:hover:not(:disabled) {
     @apply bg-emerald-600;
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
   }
 
   /* ── Section label ── */
@@ -204,18 +202,45 @@
       border border-emerald-100 dark:border-emerald-500/20;
   }
 
-  /* ── Input ── */
+  /* ── Input — clean focus, no blur glow ── */
   .input {
     @apply w-full border border-neutral-200 dark:border-neutral-700 rounded-xl px-3.5 py-2.5
       text-sm text-neutral-900 dark:text-neutral-100
       placeholder-neutral-400 dark:placeholder-neutral-600
       bg-white dark:bg-[#1a1a1a]
-      focus:outline-none focus:ring-2 focus:ring-neutral-900/15 dark:focus:ring-white/15
+      focus:outline-none
       focus:border-neutral-400 dark:focus:border-neutral-500
       transition-all duration-150;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04) inset;
   }
+  .input:focus {
+    box-shadow: 0 0 0 2.5px rgba(120,120,120,0.12), 0 1px 2px rgba(0,0,0,0.04) inset;
+  }
+  .dark .input:focus {
+    box-shadow: 0 0 0 2.5px rgba(255,255,255,0.07), 0 1px 2px rgba(0,0,0,0.1) inset;
+  }
   select.input { @apply cursor-pointer; }
+
+  /* ── Modern Select Wrapper ── */
+  .select-wrapper {
+    @apply relative;
+  }
+  .select-wrapper select {
+    @apply appearance-none pr-8;
+  }
+  .select-wrapper::after {
+    content: "";
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    @apply text-neutral-400 pointer-events-none;
+  }
 
   /* ── Badge ── */
   .badge {
@@ -246,14 +271,19 @@
   }
   .sidebar-link-active {
     @apply bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   }
   .sidebar-link-inactive {
-    @apply text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white hover:shadow-sm;
+    @apply text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white;
+  }
+  .sidebar-link-inactive:hover {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
 
-  /* ── AI Insights moving border — works in both themes ── */
+  /* ── AI moving border — fixed visibility ── */
   .ai-border-card {
     position: relative;
+    isolation: isolate;
   }
   .ai-border-card::before {
     content: "";
@@ -261,18 +291,20 @@
     inset: -1px;
     z-index: -1;
     border-radius: inherit;
-    padding: 1px;
     background: conic-gradient(from var(--ai-angle, 0deg),
       transparent 0deg,
-      rgba(79,70,229,0.9) 60deg,
+      rgba(99,102,241,1) 55deg,
+      rgba(139,92,246,0.9) 90deg,
       transparent 140deg,
-      transparent 220deg,
-      rgba(5,150,105,0.8) 290deg,
+      transparent 200deg,
+      rgba(5,150,105,0.95) 270deg,
+      rgba(20,184,166,0.9) 300deg,
       transparent 360deg);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    animation: ai-border-spin 4s linear infinite;
+    padding: 1.5px;
+    animation: ai-border-spin 3s linear infinite;
     pointer-events: none;
   }
   @property --ai-angle {
@@ -283,6 +315,39 @@
   @keyframes ai-border-spin {
     to { --ai-angle: 360deg; }
   }
+
+  /* ── Progress bar — natural, humanized ── */
+  .progress-track {
+    @apply w-full rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800/80;
+    height: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    position: relative;
+    overflow: hidden;
+    transition: width 0.9s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .progress-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0) 100%);
+    animation: progress-sheen 2.5s ease-in-out infinite;
+  }
+  @keyframes progress-sheen {
+    0%   { transform: translateX(-100%); }
+    60%  { transform: translateX(100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* ── Progress bar colors ── */
+  .progress-emerald { background: linear-gradient(90deg, #059669, #10b981); }
+  .progress-amber   { background: linear-gradient(90deg, #d97706, #f59e0b); }
+  .progress-red     { background: linear-gradient(90deg, #dc2626, #ef4444); }
+  .progress-teal    { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+  .progress-indigo  { background: linear-gradient(90deg, #4f46e5, #6366f1); }
+  .progress-dynamic { background: linear-gradient(90deg, var(--p-from), var(--p-to)); }
 }
 
 @keyframes shimmer {
@@ -291,12 +356,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.35s cubic-bezier(0.4,0,0.2,1) both;
+  animation: fadeIn 0.3s cubic-bezier(0.4,0,0.2,1) both;
 }
 
 .no-visible-scrollbar {
@@ -305,7 +370,7 @@
 }
 .no-visible-scrollbar::-webkit-scrollbar { display: none; }
 
-/* ── Glow effect CSS vars ── */
+/* ── Glow effect ── */
 .glow {
   pointer-events: none;
   position: absolute;
@@ -313,7 +378,7 @@
   border-radius: inherit;
 }
 
-/* ── Markdown body — used for AI chat replies ── */
+/* ── Markdown body ── */
 .markdown-body > *:first-child { margin-top: 0; }
 .markdown-body > *:last-child { margin-bottom: 0; }
 .markdown-body p { margin: 0; }
