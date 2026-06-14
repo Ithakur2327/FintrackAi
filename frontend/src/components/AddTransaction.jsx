@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Save } from "lucide-react";
+import ModalPortal from "./ModalPortal.jsx";
 
 const EXPENSE_CATEGORIES = ["Food","Housing","Transport","Shopping","Entertainment","Utilities","Healthcare","Education","Travel","Other"];
 const INCOME_CATEGORIES  = ["Salary","Freelance","Investment","Business","Gift","Rental","Bonus","Other"];
@@ -51,6 +52,7 @@ export default function AddTransaction({ isOpen, onClose, onSubmit, editData = n
   if (!isOpen) return null;
 
   return (
+    <ModalPortal>
     <AnimatePresence>
       <motion.div
         className="modal-overlay"
@@ -169,5 +171,6 @@ export default function AddTransaction({ isOpen, onClose, onSubmit, editData = n
         </motion.div>
       </motion.div>
     </AnimatePresence>
+    </ModalPortal>
   );
 }
