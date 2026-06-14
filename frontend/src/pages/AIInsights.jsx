@@ -29,93 +29,46 @@ const INSIGHT_ICON = {
 const DEFAULT_INSIGHT_ICON = { Icon: Sparkles, cls: "text-neutral-500 bg-neutral-100 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700" };
 
 function ScoreGauge({ score }) {
-  const R = 50;
-  const strokeW = 11;
+  const SIZE = 128;
+  const STROKE = 10;
+  const R = (SIZE - STROKE) / 2;
   const C = 2 * Math.PI * R;
-  const arc = C * 0.73;
-  const startOffset = C * 0.135;
-  const pct = Math.min(Math.max(score / 100, 0), 1);
-  const fill = arc * pct;
+  const pct = Math.max(0, Math.min(100, score)) / 100;
+  const fill = C * pct;
 
-  const color  = score >= 70 ? "#10b981" : score >= 45 ? "#f59e0b" : "#f43f5e";
-  const bgClr  = score >= 70 ? "#052e16" : score >= 45 ? "#451a03" : "#2d0a10";
-  const label  = score >= 75 ? "Excellent" : score >= 58 ? "Good" : score >= 42 ? "Fair" : "Needs Work";
-  const grade  = score >= 80 ? "A" : score >= 65 ? "B" : score >= 50 ? "C" : score >= 35 ? "D" : "F";
-
-  // Compute tip-of-arc position for dot (arc goes CW from bottom-left to bottom-right)
-  const startAngle = Math.PI * (0.5 + 0.135 * 2);
-  const endAngle   = startAngle + 2 * Math.PI * 0.73 * pct;
-  const cx = 72, cy = 72;
-  const tipX = cx + R * Math.cos(endAngle);
-  const tipY = cy + R * Math.sin(endAngle);
+  // Theme-consistent palette: emerald (good) / amber (fair) / rose (needs work)
+  const color = score >= 70 ? "#10b981" : score >= 45 ? "#f59e0b" : "#f43f5e";
+  const label = score >= 70 ? "Great" : score >= 45 ? "Fair" : "Needs work";
 
   return (
-    <div className="flex flex-col items-center gap-4 select-none py-2">
-      {/* Gauge SVG */}
-      <div className="relative" style={{ width: 144, height: 130 }}>
-        <svg width="144" height="130" viewBox="0 0 144 144" fill="none" style={{ overflow: "visible" }}>
+    <div className="flex flex-col items-center gap-3">
+      <div className="relative shrink-0" style={{ width: SIZE, height: SIZE }}>
+        <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} className="-rotate-90">
           {/* Track */}
-          <circle cx={cx} cy={cy} r={R}
-            fill="none" stroke={bgClr} strokeWidth={strokeW} strokeLinecap="round"
-            strokeDasharray={`${arc} ${C - arc}`} strokeDashoffset={`-${startOffset}`}
+          <circle
+            cx={SIZE / 2} cy={SIZE / 2} r={R}
+            fill="none" strokeWidth={STROKE}
+            className="stroke-neutral-100 dark:stroke-neutral-800"
           />
-          {/* Fill */}
-          <motion.circle cx={cx} cy={cy} r={R}
-            fill="none" stroke={color} strokeWidth={strokeW} strokeLinecap="round"
-            strokeDasharray={`${fill} ${C - fill}`} strokeDashoffset={`-${startOffset}`}
-            style={{ filter: `drop-shadow(0 0 7px ${color}66)` }}
-            initial={{ strokeDasharray: `0 ${C}` }}
-            animate={{ strokeDasharray: `${fill} ${C - fill}` }}
-            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          {/* Progress */}
+          <motion.circle
+            cx={SIZE / 2} cy={SIZE / 2} r={R}
+            fill="none" stroke={color} strokeWidth={STROKE} strokeLinecap="round"
+            strokeDasharray={C}
+            initial={{ strokeDashoffset: C }}
+            animate={{ strokeDashoffset: C - fill }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
           />
-          {/* Arc tip dot */}
-          {score > 2 && (
-            <motion.circle cx={tipX} cy={tipY} r="6"
-              fill={color}
-              style={{ filter: `drop-shadow(0 0 5px ${color}99)` }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.2, duration: 0.3 }}
-            />
-          )}
         </svg>
-
-        {/* Score number */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ paddingBottom: 2 }}>
-          <motion.span
-            className="font-black tabular-nums text-neutral-900 dark:text-neutral-50 leading-none"
-            style={{ fontSize: 42, letterSpacing: -2 }}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
-          >
-            {score}
-          </motion.span>
-          <span className="text-[11px] font-semibold text-neutral-400 tracking-widest uppercase mt-1">/ 100</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-3xl font-black text-neutral-900 dark:text-neutral-50 tabular-nums leading-none">{score}</span>
+          <span className="text-[11px] text-neutral-400 mt-1 tracking-wide">out of 100</span>
         </div>
       </div>
-
-      {/* Label + Grade */}
-      <div className="flex items-center gap-2">
-        <motion.span
-          className="text-xs font-bold px-3.5 py-1.5 rounded-full border tracking-wide"
-          style={{ color, borderColor: color + "45", background: color + "15" }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, duration: 0.3 }}
-        >
-          {label}
-        </motion.span>
-        <motion.span
-          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black border"
-          style={{ color, borderColor: color + "50", background: color + "18" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.0, duration: 0.3 }}
-        >
-          {grade}
-        </motion.span>
-      </div>
+      <span className="text-xs font-bold px-3 py-1 rounded-full border"
+        style={{ color, borderColor: color+"33", background: color+"0f" }}>
+        {label}
+      </span>
     </div>
   );
 }
