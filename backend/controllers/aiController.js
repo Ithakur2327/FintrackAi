@@ -3,11 +3,16 @@ import Income from "../models/incomeModel.js";
 
 // Groq offers a free, OpenAI-compatible chat completions API.
 // Supports either GROQ_API_KEY or ANTHROPIC_API_KEY (legacy name) env var.
-const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.ANTHROPIC_API_KEY;
-const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+// NOTE: read process.env values INSIDE the function (not at module load time).
+// ES module imports are hoisted, so this file's top-level code runs BEFORE
+// index.js calls dotenv.config() — reading process.env at the top would
+// always capture `undefined`, even after .env loads successfully.
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 async function callGroq({ system, prompt, maxTokens = 1500 }) {
+  const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.ANTHROPIC_API_KEY;
+  const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+
   if (!GROQ_API_KEY) {
     throw new Error("Missing GROQ_API_KEY (or ANTHROPIC_API_KEY) in backend .env");
   }
@@ -154,9 +159,9 @@ export const askAIQuestion = async (req, res) => {
     const context = `User's this month data: Income ₹${totalIncome}, Expenses ₹${totalExpense}, Savings ₹${totalIncome - totalExpense}. Top expenses: ${JSON.stringify(expenses.slice(0, 5).map(e => ({ category: e.category, amount: e.amount })))}`;
 
     const answer = await callGroq({
-      system: `You are FinTrackAI, a helpful personal finance advisor. Be concise, friendly, and give actionable advice. Context: ${context}`,
+      system: `You are FinTrackAI, a helpful personal finance advisor. Use the user's real numbers below to give concise, actionable advice. Format your reply using Markdown — use **bold** for key numbers/terms, bullet or numbered lists for steps/options, and short paragraphs. Avoid one giant wall of text. Context: ${context}`,
       prompt: question,
-      maxTokens: 500,
+      maxTokens: 600,
     });
 
     res.json({ success: true, data: { answer, question } });

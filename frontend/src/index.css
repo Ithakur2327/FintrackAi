@@ -312,3 +312,9 @@
   inset: 0;
   border-radius: inherit;
 }
+
+/* ── Markdown body — used for AI chat replies ── */
+.markdown-body > *:first-child { margin-top: 0; }
+.markdown-body > *:last-child { margin-bottom: 0; }
+.markdown-body p { margin: 0; }
+.markdown-body ul, .markdown-body ol { margin: 0; }

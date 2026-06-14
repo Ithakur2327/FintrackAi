@@ -65,18 +65,18 @@ function GoalModal({ isOpen, onClose, onSave, editData }) {
   if (!isOpen) return null;
   return (
     <AnimatePresence>
-      <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
+      <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={e => e.target === e.currentTarget && onClose()}>
-        <motion.div className="bg-white dark:bg-[#161616] border border-neutral-200 dark:border-neutral-800 rounded-2xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
+        <motion.div className="bg-white dark:bg-[#161616] border border-neutral-200 dark:border-neutral-800 rounded-2xl w-full max-w-md shadow-2xl max-h-[90vh] flex flex-col overflow-hidden"
           initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }}>
-          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
             <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">{editData ? "Edit Goal" : "New Goal"}</h2>
             <button onClick={onClose} className="w-8 h-8 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors">
               <X size={16} className="text-neutral-500" />
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto no-visible-scrollbar">
             <div>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Goal Title *</label>
               <input type="text" className="input" placeholder="e.g. Buy a new laptop" value={form.title}
