@@ -55,24 +55,42 @@ const MobileSidebar = ({ children }) => {
           <span className="font-bold text-neutral-900 dark:text-white text-sm tracking-tight">Fintrack</span>
         </div>
         <button
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(true)}
           className="w-9 h-9 rounded-xl flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
         >
           <Menu size={18} />
         </button>
       </div>
+
+      {/* Backdrop */}
       <AnimatePresence>
         {open && (
           <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/40 z-[99] md:hidden"
+            onClick={() => setOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="drawer"
             initial={{ x: "-100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "-100%", opacity: 0 }}
             transition={{ duration: 0.24, ease: "easeInOut" }}
-            className="fixed h-full w-64 inset-0 bg-[#f5f5f7] dark:bg-neutral-950 p-4 z-[100] flex flex-col border-r border-neutral-200 dark:border-neutral-900"
+            className="fixed top-0 left-0 h-full w-72 max-w-[85vw] bg-[#f5f5f7] dark:bg-neutral-950 p-4 z-[100] flex flex-col border-r border-neutral-200 dark:border-neutral-900 shadow-2xl"
           >
             <button
               onClick={() => setOpen(false)}
-              className="absolute right-4 top-4 w-8 h-8 flex items-center justify-center rounded-xl bg-neutral-200 dark:bg-neutral-900 hover:bg-neutral-300 dark:hover:bg-neutral-800 text-neutral-500 dark:text-neutral-400 transition-colors"
+              className="absolute right-3 top-3 w-8 h-8 flex items-center justify-center rounded-xl bg-neutral-200 dark:bg-neutral-900 hover:bg-neutral-300 dark:hover:bg-neutral-800 text-neutral-500 dark:text-neutral-400 transition-colors"
             >
               <X size={15} />
             </button>
@@ -97,7 +115,6 @@ const SidebarLink = ({ item, mobile = false, onClose }) => {
       onClick={() => { if (mobile && onClose) onClose(); }}
       className={`sidebar-link group ${isActive ? "sidebar-link-active" : "sidebar-link-inactive"} ${!showLabel && !mobile ? "justify-center px-0" : ""}`}
     >
-      {/* Icon wrapper — always centered when collapsed */}
       <div className={`flex items-center justify-center shrink-0 ${!showLabel && !mobile ? "w-full" : ""}`}>
         <Icon
           size={17}
@@ -144,7 +161,7 @@ const MENU_ITEMS = [
 ];
 
 const SidebarContent = ({ mobile = false, onClose }) => {
-  const { open, animate } = useSidebar();
+  const { open } = useSidebar();
   const { logout } = useAuth();
   const { isDark, setIsDark } = useTheme();
   const showLabels = open || mobile;
@@ -166,7 +183,7 @@ const SidebarContent = ({ mobile = false, onClose }) => {
         ))}
       </nav>
 
-      {/* Bottom — partition divider + theme toggle + logout */}
+      {/* Bottom */}
       <div className="border-t border-neutral-200/80 dark:border-neutral-800/80 pt-3 mt-1 space-y-0.5">
         <button
           onClick={() => setIsDark(p => !p)}

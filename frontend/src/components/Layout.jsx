@@ -5,16 +5,16 @@ import { PageTransition } from "./PageTransition.jsx";
 export default function Layout() {
   const location = useLocation();
   return (
-    <div className="flex h-screen bg-[#f5f5f7] dark:bg-[#0a0a0a] overflow-hidden">
-      <div className="relative z-20">
+    <div className="flex flex-col md:flex-row h-screen bg-[#f5f5f7] dark:bg-[#0a0a0a] overflow-hidden">
+      <div className="relative z-20 w-full md:w-auto shrink-0">
         <Sidebar />
       </div>
-      <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden relative min-w-0 min-h-0">
         {/* Grid pattern */}
         <div className="fixed inset-0 grid-bg opacity-100 pointer-events-none z-0" />
         {/* Soft vignette — top fade only */}
         <div className="fixed inset-x-0 top-0 h-48 bg-gradient-to-b from-[#f5f5f7] dark:from-[#0a0a0a] to-transparent pointer-events-none z-0" />
-        <div className="relative z-10 max-w-6xl mx-auto p-3 sm:p-4 lg:p-6">
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-3 py-3 sm:px-4 sm:py-4 lg:px-6 lg:py-6">
           {/*
             KEY FIX: AnimatePresence mode="wait" + React Router Outlet milke broken tha.
             Jab route change hota tha, Outlet TURANT naya content render karta tha —
