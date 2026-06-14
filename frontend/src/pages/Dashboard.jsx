@@ -103,7 +103,8 @@ export default function Dashboard() {
   const axisColor     = isDark ? "#404040" : "#d4d4d8";
 
   const savingsRate = summary.savingsRate || 0;
-  const savingsColor = savingsRate >= 20 ? "bg-emerald-500" : savingsRate >= 10 ? "bg-amber-400" : "bg-neutral-400";
+  const savingsColor = savingsRate >= 20 ? "progress-emerald" : savingsRate >= 10 ? "progress-amber" : "progress-indigo";
+  const savingsDotColor = savingsRate >= 20 ? "bg-emerald-500" : savingsRate >= 10 ? "bg-amber-400" : "bg-indigo-400";
   const savingsTextColor = savingsRate >= 20 ? "text-emerald-600 dark:text-emerald-400" : savingsRate >= 10 ? "text-amber-500 dark:text-amber-400" : "text-neutral-500 dark:text-neutral-400";
 
   if (loading && !data) {
@@ -252,19 +253,19 @@ export default function Dashboard() {
               </span>
             }
           />
-          <div className="h-2.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+          <div className="progress-track h-2.5">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(savingsRate, 100)}%` }}
               transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-              className={`h-full rounded-full ${savingsColor}`}
+              className={`progress-fill ${savingsColor}`}
             />
           </div>
           <div className="flex items-center justify-between mt-3">
             <p className="text-xs text-neutral-400 dark:text-neutral-500">
-              {savingsRate >= 20 ? "Great saving habit! 🎉" :
-               savingsRate >= 10 ? "You're on track 👍" :
-               "Try to save more this period 💪"}
+              {savingsRate >= 20 ? "You're saving at a healthy rate." :
+               savingsRate >= 10 ? "Decent progress — a little more room to grow." :
+               "Saving rate is low this period. Worth a closer look."}
             </p>
             <div className="flex items-center gap-3 text-xs text-neutral-400">
               <span className="flex items-center gap-1">
@@ -272,7 +273,7 @@ export default function Dashboard() {
                 Target: 20%
               </span>
               <span className={`flex items-center gap-1 font-semibold ${savingsTextColor}`}>
-                <span className={`w-2 h-2 rounded-full inline-block ${savingsColor}`} />
+                <span className={`w-2 h-2 rounded-full inline-block ${savingsDotColor}`} />
                 Yours: {savingsRate}%
               </span>
             </div>

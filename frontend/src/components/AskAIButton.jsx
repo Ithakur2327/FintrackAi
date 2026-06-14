@@ -6,13 +6,13 @@ import { useTheme } from "../App.jsx";
 const DIRECTIONS = ["TOP", "LEFT", "BOTTOM", "RIGHT"];
 
 const makeArcs = (isDark) => {
-  const w = isDark ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.85)";
+  const w = isDark ? "rgba(255,255,255,1)" : "rgba(0,0,0,0.95)";
   const t = isDark ? "rgba(255,255,255,0)" : "rgba(0,0,0,0)";
   return {
-    TOP:    `radial-gradient(22% 55% at 50% 0%,   ${w} 0%, ${t} 100%)`,
-    LEFT:   `radial-gradient(17% 45% at 0% 50%,   ${w} 0%, ${t} 100%)`,
-    BOTTOM: `radial-gradient(22% 55% at 50% 100%,  ${w} 0%, ${t} 100%)`,
-    RIGHT:  `radial-gradient(17% 44% at 100% 50%,  ${w} 0%, ${t} 100%)`,
+    TOP:    `radial-gradient(28% 65% at 50% 0%,   ${w} 0%, ${t} 100%)`,
+    LEFT:   `radial-gradient(22% 55% at 0% 50%,   ${w} 0%, ${t} 100%)`,
+    BOTTOM: `radial-gradient(28% 65% at 50% 100%,  ${w} 0%, ${t} 100%)`,
+    RIGHT:  `radial-gradient(22% 55% at 100% 50%,  ${w} 0%, ${t} 100%)`,
   };
 };
 
@@ -63,7 +63,7 @@ export function AskAIButton({
         {/* Rotating moving border */}
         <motion.div
           className="absolute inset-0 z-0 rounded-2xl"
-          style={{ filter: "blur(4px)", width: "100%", height: "100%" }}
+          style={{ filter: "blur(1px)", width: "100%", height: "100%" }}
           animate={{ background: arcs[direction] }}
           transition={{ ease: "linear", duration }}
         />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { User, Mail, Shield, Save, CheckCircle, AlertCircle, Trash2, X } from "lucide-react";
+import { User, Mail, Shield, Save, CheckCircle, AlertCircle, Trash2, AlertTriangle, X } from "lucide-react";
 import { useAuth } from "../App.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
@@ -9,7 +9,7 @@ const CURRENCIES = ["INR", "USD", "EUR", "GBP", "AED", "SGD", "CAD", "AUD"];
 function Toast({ message, type }) {
   if (!message) return null;
   return (
-    <div className={`fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-lg text-sm font-medium ${type === "success" ? "bg-emerald-500 text-white" : "bg-red-600 text-white"}`}>
+    <div className={`fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all ${type === "success" ? "bg-green-500 text-white" : "bg-red-600 text-white"}`}>
       {type === "success" ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
       {message}
     </div>
@@ -27,8 +27,6 @@ export default function Profile() {
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "" });
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -44,22 +42,38 @@ export default function Profile() {
       showToast("Profile updated successfully!");
     } catch (err) {
       showToast(err.response?.data?.message || "Update failed", "error");
-    } finally { setProfileLoading(false); }
+    } finally {
+      setProfileLoading(false);
+    }
   };
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) { showToast("Passwords do not match", "error"); return; }
-    if (passwordForm.newPassword.length < 6) { showToast("Password must be at least 6 characters", "error"); return; }
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      showToast("Passwords do not match", "error");
+      return;
+    }
+    if (passwordForm.newPassword.length < 6) {
+      showToast("Password must be at least 6 characters", "error");
+      return;
+    }
     setPasswordLoading(true);
     try {
-      await axios.put(`${API_BASE}/auth/change-password`, { currentPassword: passwordForm.currentPassword, newPassword: passwordForm.newPassword });
+      await axios.put(`${API_BASE}/auth/change-password`, {
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword,
+      });
       showToast("Password changed successfully!");
       setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (err) {
       showToast(err.response?.data?.message || "Password change failed", "error");
-    } finally { setPasswordLoading(false); }
+    } finally {
+      setPasswordLoading(false);
+    }
   };
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const handleDeleteAccount = async () => {
     setDeleteLoading(true);
@@ -72,10 +86,8 @@ export default function Profile() {
     }
   };
 
-  const initial = user?.name?.[0]?.toUpperCase() || "U";
-
   return (
-    <div className="space-y-5 max-w-2xl mx-auto animate-fade-in">
+    <div className="space-y-5 max-w-4xl mx-auto animate-fade-in">
       <Toast {...toast} />
 
       {/* Header */}
@@ -84,25 +96,25 @@ export default function Profile() {
         <p className="text-neutral-500 text-sm mt-0.5">Manage your account and preferences</p>
       </div>
 
-      {/* Avatar card */}
+      {/* Avatar section */}
       <div className="card-big flex items-center gap-5">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-700 flex items-center justify-center text-white text-2xl font-black shrink-0 select-none">
-          {initial}
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-700 flex items-center justify-center text-white text-2xl font-black shrink-0">
+          {user?.name?.[0]?.toUpperCase() || "U"}
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-neutral-900 dark:text-neutral-100 text-lg truncate">{user?.name}</p>
-          <p className="text-neutral-500 text-sm truncate">{user?.email}</p>
-          <span className="inline-flex items-center gap-1.5 mt-1.5 text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full font-medium border border-emerald-500/20">
+        <div>
+          <p className="font-bold text-neutral-900 dark:text-neutral-100 text-lg">{user?.name}</p>
+          <p className="text-neutral-500 text-sm">{user?.email}</p>
+          <span className="inline-flex items-center gap-1 mt-1.5 text-xs bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 px-2.5 py-1 rounded-full font-medium">
             <CheckCircle size={11} /> Active Account
           </span>
         </div>
       </div>
 
-      {/* Personal Information */}
+      {/* Profile Form */}
       <div className="card-big">
         <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
-            <User size={15} className="text-emerald-600 dark:text-emerald-400" />
+          <div className="icon-box-emerald">
+            <User size={16} className="text-emerald-600 dark:text-emerald-400" />
           </div>
           <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Personal Information</h2>
         </div>
@@ -117,8 +129,8 @@ export default function Profile() {
           <div>
             <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Email Address</label>
             <div className="relative">
-              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
-              <input type="email" className="input pl-9 opacity-60 cursor-not-allowed" value={user?.email} disabled />
+              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+              <input type="email" className="input pl-9 bg-neutral-50 dark:bg-neutral-900 cursor-not-allowed text-neutral-500 dark:text-neutral-500" value={user?.email} disabled />
             </div>
             <p className="text-xs text-neutral-400 mt-1">Email cannot be changed</p>
           </div>
@@ -126,7 +138,7 @@ export default function Profile() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">Currency</label>
-              <select className="input select-modern" value={profileForm.currency}
+              <select className="input" value={profileForm.currency}
                 onChange={e => setProfileForm(p => ({ ...p, currency: e.target.value }))}>
                 {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -146,17 +158,17 @@ export default function Profile() {
         </form>
       </div>
 
-      {/* Change Password */}
+      {/* Password Form */}
       <div className="card-big">
         <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 bg-orange-500/10 border border-orange-500/20 rounded-xl flex items-center justify-center">
-            <Shield size={15} className="text-orange-500" />
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20">
+            <Shield size={16} className="text-amber-600 dark:text-amber-400" />
           </div>
           <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Change Password</h2>
         </div>
 
         <form onSubmit={handlePasswordChange} className="space-y-4">
-          {["currentPassword", "newPassword", "confirmPassword"].map((field) => (
+          {["currentPassword", "newPassword", "confirmPassword"].map((field, i) => (
             <div key={field}>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-1.5">
                 {field === "currentPassword" ? "Current Password" : field === "newPassword" ? "New Password" : "Confirm New Password"}
@@ -168,42 +180,48 @@ export default function Profile() {
           ))}
 
           <button type="submit" disabled={passwordLoading} className="btn-secondary flex items-center gap-2">
-            {passwordLoading ? <span className="w-4 h-4 border-2 border-neutral-400/30 border-t-neutral-600 rounded-full animate-spin" /> : <Shield size={15} />}
+            {passwordLoading ? <span className="w-4 h-4 border-2 border-slate-400/30 border-t-slate-600 rounded-full animate-spin" /> : <Shield size={15} />}
             Update Password
           </button>
         </form>
       </div>
 
-      {/* Delete Account — no "Danger Zone" label, just a clean card */}
+      {/* Account actions — delete only */}
       <div className="card-big">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="font-semibold text-neutral-900 dark:text-neutral-100 mb-1">Delete Account</p>
-            <p className="text-sm text-neutral-500">Permanently remove your account and all data. This cannot be undone.</p>
+        <div className="flex items-center gap-2 mb-2">
+          <div className="icon-box">
+            <Trash2 size={15} className="text-neutral-500 dark:text-neutral-400" />
           </div>
-          <button onClick={() => setShowDeleteConfirm(true)} className="btn-danger shrink-0 flex items-center gap-2">
-            <Trash2 size={14} /> Delete
-          </button>
+          <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Delete Account</h2>
         </div>
+        <p className="text-sm text-neutral-500 mb-4">
+          Permanently delete your account and all associated data. This action cannot be undone.
+        </p>
+        <button onClick={() => setShowDeleteConfirm(true)} className="btn-danger flex items-center gap-2">
+          <Trash2 size={15} /> Delete Account
+        </button>
       </div>
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        <div className="modal-overlay"
           onClick={e => e.target === e.currentTarget && !deleteLoading && setShowDeleteConfirm(false)}>
-          <div className="bg-white dark:bg-[#161616] border border-neutral-200 dark:border-neutral-800 rounded-2xl w-full max-w-sm shadow-2xl">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">
+          <div className="modal-card max-w-sm max-h-[90vh]">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
               <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">Delete Account</h2>
               <button onClick={() => setShowDeleteConfirm(false)} disabled={deleteLoading}
-                className="w-8 h-8 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors">
-                <X size={16} className="text-neutral-500" />
+                className="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors">
+                <X size={15} className="text-neutral-500" />
               </button>
             </div>
-            <div className="p-6">
-              <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-6">
-                Are you sure? All your income, expenses, budgets, and goals will be permanently removed.
+            <div className="p-5 overflow-y-auto no-visible-scrollbar">
+              <div className="w-12 h-12 rounded-2xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center mb-4">
+                <AlertTriangle size={22} className="text-red-500" />
+              </div>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">
+                Are you sure you want to delete your account? All your data — income, expenses, budgets, and goals — will be permanently removed.
               </p>
-              <div className="flex gap-3">
+              <div className="flex gap-3 mt-6">
                 <button onClick={() => setShowDeleteConfirm(false)} disabled={deleteLoading} className="btn-secondary flex-1">
                   Cancel
                 </button>

@@ -13,10 +13,12 @@
   }
 
   body {
+    /* Apple SF Pro font stack — numbers & words both */
     font-family:
       -apple-system, BlinkMacSystemFont,
       'SF Pro Display', 'SF Pro Text',
       'Helvetica Neue', Arial, sans-serif;
+    font-feature-settings: "tnum" 1, "cv05" 1;
     @apply bg-[#f5f5f7] text-neutral-900 dark:bg-[#0a0a0a] dark:text-neutral-100;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
@@ -42,7 +44,7 @@
     background-size: 20px 20px;
   }
 
-  /* ── Card ── */
+  /* ── Card — fully opaque in both themes ── */
   .card {
     @apply relative bg-white dark:bg-[#161616] rounded-2xl
       border border-neutral-200/80 dark:border-neutral-800/80
@@ -61,7 +63,7 @@
     @apply border-neutral-300 dark:border-neutral-700/80;
   }
 
-  /* ── Big cards ── */
+  /* ── Big cards — subtle 3D shadow only, no perspective distortion ── */
   .card-big {
     @apply relative bg-white dark:bg-[#161616] rounded-2xl
       border border-neutral-200/80 dark:border-neutral-800/80
@@ -73,23 +75,49 @@
     will-change: transform, box-shadow;
   }
   .card-big:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow:
-      0 6px 20px rgba(0,0,0,0.09),
-      0 2px 8px rgba(0,0,0,0.05);
+      0 8px 24px rgba(0,0,0,0.10),
+      0 3px 8px rgba(0,0,0,0.06),
+      0 1px 3px rgba(0,0,0,0.04);
     @apply border-neutral-300/80 dark:border-neutral-700/80;
   }
   .dark .card-big:hover {
     box-shadow:
-      0 6px 24px rgba(0,0,0,0.45),
-      0 2px 8px rgba(0,0,0,0.25);
+      0 8px 28px rgba(0,0,0,0.5),
+      0 3px 8px rgba(0,0,0,0.3),
+      0 0 0 0.5px rgba(255,255,255,0.04);
   }
 
-  /* ── Ask AI Button ── */
+  /* ── Modal surface — the "add card" used by every page (Transaction/Budget/Goal) ──
+     Exact same theme as dashboard cards: opaque bg, soft border, layered shadow.
+     Background of the page behind it stays blurred via the overlay below. */
+  .modal-card {
+    @apply relative bg-white dark:bg-[#161616] rounded-2xl
+      border border-neutral-200/80 dark:border-neutral-800/80
+      w-full shadow-2xl flex flex-col overflow-hidden;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.07),
+      0 24px 48px -12px rgba(0,0,0,0.25),
+      0 12px 24px -8px rgba(0,0,0,0.12);
+  }
+  .dark .modal-card {
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.3),
+      0 24px 48px -12px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(255,255,255,0.03);
+  }
+  /* Overlay used by every "add" modal across the app — keeps background blurred & centered */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50
+      flex items-center justify-center p-4;
+  }
+
+  /* ── Ask AI Button — square + curved corners, theme-aware ── */
   .ask-ai-btn {
     @apply relative inline-flex items-center justify-center gap-2
       overflow-hidden rounded-2xl p-px
-      transition-all duration-200 active:scale-[0.97]
+      transition-all duration-200 active:scale-[0.98]
       disabled:opacity-40 disabled:cursor-not-allowed;
   }
   .ask-ai-btn-inner {
@@ -97,26 +125,29 @@
       rounded-[14px] px-4 py-2 text-sm font-semibold tracking-tight select-none;
   }
 
-  /* ── Buttons — subtle 3D, not gimmicky ── */
+  /* ── Buttons — subtle 3D, refined not gimmicky ── */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-neutral-900 text-white dark:bg-white dark:text-black
       border border-neutral-900 dark:border-white
       transition-all duration-150 active:scale-[0.98]
       disabled:opacity-40 disabled:cursor-not-allowed;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.22), 0 1px 2px rgba(0,0,0,0.10);
   }
   .btn-primary:hover:not(:disabled) {
     @apply bg-neutral-800 dark:bg-neutral-100;
-    box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.18), 0 2px 5px rgba(0,0,0,0.10);
     transform: translateY(-0.5px);
   }
   .btn-primary:active:not(:disabled) {
     transform: translateY(0.5px);
-    box-shadow: 0 0px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 0 0 rgba(0,0,0,0.2);
   }
   .dark .btn-primary {
-    box-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.25);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.14), 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .dark .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 2px 0 rgba(255,255,255,0.1), 0 2px 5px rgba(0,0,0,0.25);
   }
 
   .btn-secondary {
@@ -139,7 +170,7 @@
     @apply bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200;
   }
 
-  /* ── Icon button — subtle 3D ── */
+  /* ── Icon button — subtle 3D, matches btn-primary/secondary ── */
   .btn-icon {
     @apply w-9 h-9 rounded-xl flex items-center justify-center
       bg-white dark:bg-neutral-900 text-neutral-500 dark:text-neutral-400
@@ -160,12 +191,19 @@
   .dark .btn-icon {
     box-shadow: 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.25);
   }
+  .dark .btn-icon:hover:not(:disabled) {
+    box-shadow: 0 2px 0 rgba(255,255,255,0.07), 0 1px 4px rgba(0,0,0,0.3);
+  }
 
   .btn-danger {
     @apply inline-flex items-center justify-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-xl
       bg-red-500 text-white border border-red-600
       transition-all duration-150 active:scale-[0.98];
     box-shadow: 0 1px 0 rgba(185,28,28,0.35);
+  }
+  .btn-danger:hover {
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 0 rgba(185,28,28,0.3);
   }
 
   .btn-green {
@@ -178,6 +216,7 @@
   .btn-green:hover:not(:disabled) {
     @apply bg-emerald-600;
     transform: translateY(-0.5px);
+    box-shadow: 0 2px 0 rgba(4,120,87,0.3), 0 2px 5px rgba(0,0,0,0.08);
   }
 
   /* ── Section label ── */
@@ -202,7 +241,7 @@
       border border-emerald-100 dark:border-emerald-500/20;
   }
 
-  /* ── Input — clean focus, no blur glow ── */
+  /* ── Input — clean focus, no harsh ring/blur glow ── */
   .input {
     @apply w-full border border-neutral-200 dark:border-neutral-700 rounded-xl px-3.5 py-2.5
       text-sm text-neutral-900 dark:text-neutral-100
@@ -210,36 +249,28 @@
       bg-white dark:bg-[#1a1a1a]
       focus:outline-none
       focus:border-neutral-400 dark:focus:border-neutral-500
-      transition-all duration-150;
+      transition-colors duration-150;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04) inset;
   }
   .input:focus {
-    box-shadow: 0 0 0 2.5px rgba(120,120,120,0.12), 0 1px 2px rgba(0,0,0,0.04) inset;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04) inset, 0 0 0 3px rgba(0,0,0,0.04);
   }
   .dark .input:focus {
-    box-shadow: 0 0 0 2.5px rgba(255,255,255,0.07), 0 1px 2px rgba(0,0,0,0.1) inset;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset, 0 0 0 3px rgba(255,255,255,0.04);
   }
-  select.input { @apply cursor-pointer; }
 
-  /* ── Modern Select Wrapper ── */
-  .select-wrapper {
-    @apply relative;
+  /* ── Modern select — custom chevron, no native arrow, same focus rules as .input ── */
+  select.input {
+    @apply cursor-pointer appearance-none pr-9 bg-no-repeat;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23a3a3a3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 0.9rem center;
+    background-size: 10px 6px;
   }
-  .select-wrapper select {
-    @apply appearance-none pr-8;
+  .dark select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23737373' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   }
-  .select-wrapper::after {
-    content: "";
-    position: absolute;
-    right: 11px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid currentColor;
-    @apply text-neutral-400 pointer-events-none;
+  select.input option {
+    @apply bg-white dark:bg-[#1a1a1a] text-neutral-900 dark:text-neutral-100;
   }
 
   /* ── Badge ── */
@@ -280,46 +311,9 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
 
-  /* ── AI moving border — fixed visibility ── */
-  .ai-border-card {
-    position: relative;
-    isolation: isolate;
-  }
-  .ai-border-card::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    z-index: -1;
-    border-radius: inherit;
-    background: conic-gradient(from var(--ai-angle, 0deg),
-      transparent 0deg,
-      rgba(99,102,241,1) 55deg,
-      rgba(139,92,246,0.9) 90deg,
-      transparent 140deg,
-      transparent 200deg,
-      rgba(5,150,105,0.95) 270deg,
-      rgba(20,184,166,0.9) 300deg,
-      transparent 360deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1.5px;
-    animation: ai-border-spin 3s linear infinite;
-    pointer-events: none;
-  }
-  @property --ai-angle {
-    syntax: '<angle>';
-    inherits: false;
-    initial-value: 0deg;
-  }
-  @keyframes ai-border-spin {
-    to { --ai-angle: 360deg; }
-  }
-
-  /* ── Progress bar — natural, humanized ── */
+  /* ── Progress bar — humanized, single tone with soft sheen, no neon ── */
   .progress-track {
     @apply w-full rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800/80;
-    height: 6px;
   }
   .progress-fill {
     height: 100%;
@@ -332,22 +326,19 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0) 100%);
-    animation: progress-sheen 2.5s ease-in-out infinite;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 45%, rgba(255,255,255,0) 90%);
+    animation: progress-sheen 3s ease-in-out infinite;
   }
   @keyframes progress-sheen {
-    0%   { transform: translateX(-100%); }
-    60%  { transform: translateX(100%); }
-    100% { transform: translateX(100%); }
+    0%   { transform: translateX(-120%); }
+    55%  { transform: translateX(120%); }
+    100% { transform: translateX(120%); }
   }
-
-  /* ── Progress bar colors ── */
-  .progress-emerald { background: linear-gradient(90deg, #059669, #10b981); }
-  .progress-amber   { background: linear-gradient(90deg, #d97706, #f59e0b); }
-  .progress-red     { background: linear-gradient(90deg, #dc2626, #ef4444); }
-  .progress-teal    { background: linear-gradient(90deg, #0d9488, #14b8a6); }
-  .progress-indigo  { background: linear-gradient(90deg, #4f46e5, #6366f1); }
-  .progress-dynamic { background: linear-gradient(90deg, var(--p-from), var(--p-to)); }
+  .progress-emerald { background: #10b981; }
+  .progress-amber   { background: #f59e0b; }
+  .progress-red     { background: #ef4444; }
+  .progress-teal    { background: #14b8a6; }
+  .progress-indigo  { background: #6366f1; }
 }
 
 @keyframes shimmer {
@@ -356,12 +347,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s cubic-bezier(0.4,0,0.2,1) both;
+  animation: fadeIn 0.35s cubic-bezier(0.4,0,0.2,1) both;
 }
 
 .no-visible-scrollbar {
@@ -370,7 +361,7 @@
 }
 .no-visible-scrollbar::-webkit-scrollbar { display: none; }
 
-/* ── Glow effect ── */
+/* ── Glow effect CSS vars ── */
 .glow {
   pointer-events: none;
   position: absolute;
@@ -378,7 +369,7 @@
   border-radius: inherit;
 }
 
-/* ── Markdown body ── */
+/* ── Markdown body — used for AI chat replies ── */
 .markdown-body > *:first-child { margin-top: 0; }
 .markdown-body > *:last-child { margin-bottom: 0; }
 .markdown-body p { margin: 0; }
