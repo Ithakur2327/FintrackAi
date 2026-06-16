@@ -186,7 +186,6 @@ export default function Expense() {
         </div>
       </div>
 
-      {/* ── CHARTS — always visible ── */}
       <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
         <div className="card-big">
           <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4 text-sm tracking-tight">{chartLabel}</h3>

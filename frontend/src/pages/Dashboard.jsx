@@ -242,7 +242,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Savings rate — themed properly ── */}
+  
       {savingsRate > 0 && (
         <div className="card-big">
           <SectionHeader
@@ -281,7 +281,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* ── Recent transactions ── */}
+
       <div className="card-big">
         <SectionHeader
           title="Recent Transactions"
